@@ -71,7 +71,7 @@ function live(code){
  }catch(x){}};
  tick();timers.push(setInterval(tick,8000))}
 setInterval(()=>{if(!$("p2").classList.contains("h"))load()},15000);
-const OA_ADD="https://line.me/R/ti/p/@yourshop"; // เปลี่ยน @yourshop เป็น Basic ID ของ OA ร้าน
+const OA_ADD="https://line.me/R/ti/p/@373jzgho"; // เปลี่ยน @yourshop เป็น Basic ID ของ OA ร้าน
 async function chk(){try{const f=await liff.getFriendship();if(f.friendFlag)$("fr").classList.add("h");else{$("fa").href=OA_ADD;$("fr").classList.remove("h")}}catch(e){}}
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)chk()});
 liff.init({liffId:LIFF_ID}).then(async()=>{
