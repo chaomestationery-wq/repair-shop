@@ -1,81 +1,427 @@
-<!DOCTYPE html>
-<html lang="th"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>แจ้งซ่อมมือถือ รับ-ส่งถึงที่</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<style>
-body{margin:0;font-family:system-ui,sans-serif;background:#f4f6f8;color:#1b2430}
-.w{max-width:560px;margin:auto;padding:14px}.c{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px}
-label{display:block;font-weight:600;margin:10px 0 4px}
-input,textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #ccd3dc;border-radius:10px;font:inherit}
-button{width:100%;padding:12px;margin-top:10px;border:0;border-radius:10px;background:#06c755;color:#fff;font:inherit;font-weight:700}
-button.s{background:#eef1f5;color:#1b2430}#map{height:260px;border-radius:10px}
-.tabs{display:flex;gap:6px;margin-bottom:10px}.tabs button{margin:0;background:#fff;color:#1b2430}.tabs .on{background:#06c755;color:#fff}
-.tl{list-style:none;padding:0;margin:8px 0 0}.tl li{padding:2px 0 8px 22px;position:relative;color:#8a96a6}
-.tl li:before{content:"";position:absolute;left:3px;top:7px;width:10px;height:10px;border-radius:50%;background:#ccd3dc}
-.tl .d{color:#1b2430}.tl .d:before{background:#06c755}.tl .n{font-weight:700;color:#1b2430}.tl .n:before{background:#2563eb}
-#map,.lm{height:260px;border-radius:10px}.lm{height:200px;margin-top:8px}small{color:#8a96a6;margin-left:6px}.h{display:none}
-</style></head><body><div class="w">
-<div class="tabs"><button id="t1" class="on">แจ้งซ่อม</button><button id="t2">ออเดอร์ของฉัน</button></div>
-<div id="fr" class="c h"><b>🔔 รับแจ้งเตือนสถานะใน LINE</b><br>เพิ่มร้านเป็นเพื่อน เพื่อรับข้อความตอนไรเดอร์ไปรับ-ส่งเครื่อง<a id="fa" target="_blank" rel="noopener" style="display:block;margin-top:10px;padding:12px;border-radius:10px;background:#06c755;color:#fff;text-align:center;font-weight:700;text-decoration:none">เพิ่มเพื่อน</a></div>
-<div id="p1"><div class="c">
-<label>ชื่อ</label><input id="nm"><label>เบอร์โทร</label><input id="ph" type="tel">
-<label>รุ่น / อาการเสีย</label><textarea id="dv"></textarea>
-<label>ที่อยู่รับ-ส่ง</label><textarea id="ad"></textarea>
-<label>ปักหมุด (แตะแผนที่ หรือลากหมุด)</label><div id="map"></div>
-<button class="s" id="gps">📍 ใช้ตำแหน่งปัจจุบัน</button>
-<button id="go">ส่งข้อมูลแจ้งซ่อม</button><p id="msg"></p></div></div>
-<div id="p2" class="h"></div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-<script>
-const LIFF_ID="2012349104-YQE03Zrt", API="https://script.google.com/macros/s/AKfycbz1VUs-awvQE7IoUOupZRn014N44hN2BoxhXG6HUQwKMg96HRYZ0UOq7o8qMxoWc1HT/exec";
-const CENTER=[13.75,100.5], ZOOM=6; // เปลี่ยนเป็นพิกัดร้านของคุณ
-const $=i=>document.getElementById(i), esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-let uid="",pin=null,marker=null;
-const call=async b=>(await fetch(API,{method:"POST",body:JSON.stringify(b)})).json();
-const map=L.map("map").setView(CENTER,ZOOM);
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(map);
-function setPin(ll){pin=ll;if(marker)marker.setLatLng(ll);else{marker=L.marker(ll,{draggable:true}).addTo(map);marker.on("dragend",()=>pin=marker.getLatLng())}}
-map.on("click",e=>setPin(e.latlng));
-$("gps").onclick=()=>navigator.geolocation.getCurrentPosition(p=>{const ll=L.latLng(p.coords.latitude,p.coords.longitude);setPin(ll);map.setView(ll,17)},()=>$("msg").textContent="ขอตำแหน่งไม่สำเร็จ แตะแผนที่เพื่อปักหมุดแทนได้");
-function tab(n){$("p1").classList.toggle("h",n!=1);$("p2").classList.toggle("h",n!=2);$("t1").classList.toggle("on",n==1);$("t2").classList.toggle("on",n==2);if(n==1)map.invalidateSize();else load(true)}
-$("t1").onclick=()=>tab(1);$("t2").onclick=()=>tab(2);
-$("go").onclick=async()=>{
- $("go").disabled=true;$("msg").textContent="กำลังส่ง...";
- try{const r=await call({action:"create",userId:uid,name:$("nm").value,phone:$("ph").value,device:$("dv").value,address:$("ad").value,lat:pin?pin.lat:null,lng:pin?pin.lng:null});
-  $("msg").textContent=r.ok?"✅ รับเรื่องแล้ว รหัส "+r.code+" — ดูสถานะที่แท็บ 'ออเดอร์ของฉัน'":"❌ "+r.error;
- }catch(e){$("msg").textContent="❌ ส่งไม่สำเร็จ ลองใหม่อีกครั้ง"}
- $("go").disabled=false;chk()};
-let sig="",timers=[];
-const tiles=m=>L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
-async function load(first){
- try{const r=await call({action:"mine",userId:uid}),s=JSON.stringify(r.orders);
-  if(s===sig&&!first)return;sig=s;timers.forEach(clearInterval);timers=[];
-  if(!r.orders.length){$("p2").innerHTML='<div class="c">ยังไม่มีออเดอร์</div>';return}
-  $("p2").innerHTML=r.orders.map(o=>{const lv=o.step==1||o.step==5;return '<div class="c"><b>#'+esc(o.code)+'</b> '+esc(o.device)+'<ul class="tl">'+r.steps.map((t,i)=>
-   '<li class="'+(i<o.step?"d":i==o.step?"n":"")+'">'+t+(o.history[i]?'<small>'+new Date(o.history[i]).toLocaleString("th-TH",{dateStyle:"short",timeStyle:"short"})+'</small>':"")+'</li>').join("")+'</ul>'+
-   (lv?'<b>🛵 ตำแหน่งไรเดอร์</b><div class="lm" id="m_'+o.code+'"></div><small id="e_'+o.code+'"></small>':"")+'</div>'}).join("");
-  r.orders.filter(o=>o.step==1||o.step==5).forEach(o=>live(o.code));
- }catch(e){$("p2").innerHTML='<div class="c">โหลดไม่สำเร็จ</div>'}}
-function live(code){
- const m=L.map("m_"+code);tiles(m);let rm=null,cm=null,fit=false;const e=document.getElementById("e_"+code);
- const tick=async()=>{try{const r=await call({action:"loc",userId:uid,code});if(!r.ok)return;
-  if(r.pin&&!cm)cm=L.marker([r.pin.lat,r.pin.lng]).addTo(m);
-  if(r.loc){const ll=[r.loc.lat,r.loc.lng];
-   if(rm)rm.setLatLng(ll);else rm=L.marker(ll,{icon:L.divIcon({html:"🛵",className:"",iconSize:[30,30]})}).addTo(m);
-   if(!fit){m.fitBounds(L.latLngBounds([ll].concat(r.pin?[[r.pin.lat,r.pin.lng]]:[])).pad(.3),{maxZoom:17});fit=true}
-   e.textContent=(r.rider||"ไรเดอร์")+" · อัปเดต "+new Date(r.loc.t).toLocaleTimeString("th-TH")
-  }else if(!fit){m.setView(r.pin?[r.pin.lat,r.pin.lng]:CENTER,15);fit=true;e.textContent="รอไรเดอร์เริ่มแชร์ตำแหน่ง..."}
- }catch(x){}};
- tick();timers.push(setInterval(tick,8000))}
-setInterval(()=>{if(!$("p2").classList.contains("h"))load()},15000);
-const OA_ADD="https://line.me/R/ti/p/@yourshop"; // เปลี่ยน @yourshop เป็น Basic ID ของ OA ร้าน
-async function chk(){try{const f=await liff.getFriendship();if(f.friendFlag)$("fr").classList.add("h");else{$("fa").href=OA_ADD;$("fr").classList.remove("h")}}catch(e){}}
-document.addEventListener("visibilitychange",()=>{if(!document.hidden)chk()});
-liff.init({liffId:LIFF_ID}).then(async()=>{
- if(!liff.isLoggedIn()){liff.login();return}
- const p=await liff.getProfile();uid=p.userId;$("nm").value=p.displayName||"";chk();
-}).catch(e=>$("msg").textContent="เปิดผ่านแอป LINE เท่านั้น");
-</script></body></html>
+```javascript
+/** ร้านซ่อมมือถือ – Backend Google Apps Script + Google Sheets
+ * Script Properties:
+ * LINE_TOKEN = LINE Messaging API Channel Access Token
+ * OWNER_ID   = LINE User ID ของเจ้าของร้าน
+ */
+
+const P = PropertiesService.getScriptProperties();
+
+const STATUS = [
+  'รับเรื่องแล้ว',
+  'กำลังไปรับเครื่อง',
+  'รับเครื่องแล้ว',
+  'กำลังซ่อม',
+  'ซ่อมเสร็จ',
+  'กำลังนำส่ง',
+  'ส่งมอบแล้ว'
+];
+
+const NOTIFY = [
+  'กำลังไปรับเครื่อง',
+  'ซ่อมเสร็จ',
+  'กำลังนำส่ง',
+  'ส่งมอบแล้ว'
+];
+
+const HEAD = [
+  'รหัส', 'เวลา', 'ชื่อ', 'เบอร์', 'เครื่อง/อาการ',
+  'ที่อยู่', 'lat', 'lng', 'แผนที่', 'userId',
+  'สถานะ', 'history'
+];
+
+const STATUS_COL = 11;
+const HISTORY_COL = 12;
+const SHEET_NAME = 'Orders';
+
+/* -------------------- พื้นฐาน -------------------- */
+
+function sheet_() {
+  const ss = SpreadsheetApp.getActive();
+  let sh = ss.getSheetByName(SHEET_NAME);
+
+  if (!sh) {
+    sh = ss.insertSheet(SHEET_NAME);
+    sh.getRange(1, 1, 1, HEAD.length).setValues([HEAD]);
+    sh.setFrozenRows(1);
+  }
+
+  return sh;
+}
+
+function out_(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function clean_(value, max) {
+  return String(value == null ? '' : value)
+    .trim()
+    .slice(0, max);
+}
+
+function safeHistory_(value) {
+  try {
+    const parsed = JSON.parse(String(value || '{}'));
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed)
+      ? parsed
+      : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function push_(to, message) {
+  if (!to) return;
+
+  const token = P.getProperty('LINE_TOKEN');
+  if (!token) {
+    console.error('ไม่พบ LINE_TOKEN ใน Script Properties');
+    return;
+  }
+
+  try {
+    const response = UrlFetchApp.fetch(
+      'https://api.line.me/v2/bot/message/push',
+      {
+        method: 'post',
+        contentType: 'application/json',
+        muteHttpExceptions: true,
+        headers: {
+          Authorization: 'Bearer ' + token
+        },
+        payload: JSON.stringify({
+          to: String(to).trim(),
+          messages: [{
+            type: 'text',
+            text: String(message).slice(0, 4900)
+          }]
+        })
+      }
+    );
+
+    console.log(
+      'LINE Push:',
+      response.getResponseCode(),
+      response.getContentText()
+    );
+
+  } catch (err) {
+    console.error('LINE Push Error:', String(err));
+  }
+}
+
+function genCode_() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let result = '';
+
+  for (let i = 0; i < 6; i++) {
+    result += chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  return result;
+}
+
+/* -------------------- API -------------------- */
+
+function doPost(e) {
+  try {
+    if (!e || !e.postData || !e.postData.contents) {
+      return out_({
+        ok: false,
+        error: 'ไม่พบข้อมูลที่ส่งมา'
+      });
+    }
+
+    const d = JSON.parse(e.postData.contents);
+    const sh = sheet_();
+
+    /* ===== สร้างรายการแจ้งซ่อม ===== */
+
+    if (d.action === 'create') {
+      const name = clean_(d.name, 80);
+      const phone = clean_(d.phone, 20);
+      const address = clean_(d.address, 300);
+      const device = clean_(d.device, 200);
+      const userId = clean_(d.userId, 100);
+
+      if (!name || !phone || !address || !device || !userId) {
+        return out_({
+          ok: false,
+          error: 'กรุณากรอกข้อมูลให้ครบ และตรวจสอบ LINE Login'
+        });
+      }
+
+      if (!/^[0-9+\-\s]{9,}$/.test(phone)) {
+        return out_({
+          ok: false,
+          error: 'เบอร์โทรศัพท์ไม่ถูกต้อง'
+        });
+      }
+
+      const lat = Number(d.lat);
+      const lng = Number(d.lng);
+
+      const hasPin =
+        d.lat !== null &&
+        d.lng !== null &&
+        d.lat !== '' &&
+        d.lng !== '' &&
+        Number.isFinite(lat) &&
+        Number.isFinite(lng) &&
+        Math.abs(lat) <= 90 &&
+        Math.abs(lng) <= 180;
+
+      const map = hasPin
+        ? 'https://www.google.com/maps?q=' + lat + ',' + lng
+        : '';
+
+      const code = genCode_();
+      const now = Date.now();
+
+      const lock = LockService.getScriptLock();
+      lock.waitLock(10000);
+
+      try {
+        sh.appendRow([
+          code,
+          new Date(now),
+          name,
+          "'" + phone,
+          device,
+          address,
+          hasPin ? lat : '',
+          hasPin ? lng : '',
+          map,
+          userId,
+          STATUS[0],
+          JSON.stringify({ 0: now })
+        ]);
+      } finally {
+        lock.releaseLock();
+      }
+
+      const msg =
+        '🔧 แจ้งซ่อมใหม่ #' + code +
+        '\nชื่อ: ' + name +
+        '\nเบอร์: ' + phone +
+        '\nเครื่อง: ' + device +
+        '\nที่อยู่: ' + address +
+        '\nพิกัด: ' + (map || '-');
+
+      push_(P.getProperty('OWNER_ID'), msg);
+
+      try {
+        const email = Session.getEffectiveUser().getEmail();
+        if (email) {
+          MailApp.sendEmail(
+            email,
+            'แจ้งซ่อมใหม่ #' + code,
+            msg
+          );
+        }
+      } catch (mailError) {
+        console.error('Email Error:', String(mailError));
+      }
+
+      return out_({
+        ok: true,
+        code: code,
+        message: 'รับแจ้งซ่อมเรียบร้อย'
+      });
+    }
+
+    /* ===== ดึงออเดอร์ของลูกค้า ===== */
+
+    if (d.action === 'mine') {
+      const userId = clean_(d.userId, 100);
+
+      if (!userId) {
+        return out_({
+          ok: false,
+          error: 'ไม่พบ LINE User ID กรุณาเข้าสู่ระบบ LINE ใหม่'
+        });
+      }
+
+      const lastRow = sh.getLastRow();
+
+      if (lastRow < 2) {
+        return out_({
+          ok: true,
+          steps: STATUS,
+          orders: []
+        });
+      }
+
+      const rows = sh
+        .getRange(2, 1, lastRow - 1, HEAD.length)
+        .getValues();
+
+      const orders = rows
+        .filter(function (r) {
+          return clean_(r[9], 100) === userId;
+        })
+        .reverse()
+        .slice(0, 20)
+        .map(function (r) {
+          const statusIndex = STATUS.indexOf(
+            clean_(r[10], 100)
+          );
+
+          return {
+            code: String(r[0] || ''),
+            device: String(r[4] || ''),
+            step: statusIndex >= 0 ? statusIndex : 0,
+            history: safeHistory_(r[11])
+          };
+        });
+
+      return out_({
+        ok: true,
+        steps: STATUS,
+        orders: orders
+      });
+    }
+
+    return out_({
+      ok: false,
+      error: 'ไม่รู้จัก action: ' + String(d.action || '')
+    });
+
+  } catch (err) {
+    console.error('doPost Error:', err.stack || String(err));
+
+    return out_({
+      ok: false,
+      error: String(err.message || err)
+    });
+  }
+}
+
+/* -------------------- อัปเดตสถานะ -------------------- */
+
+/**
+ * เมื่อพนักงานเปลี่ยนสถานะในชีต Orders
+ * จะบันทึกเวลาใน history และแจ้ง LINE ลูกค้าตามขั้นตอนสำคัญ
+ */
+function onSheetEdit(e) {
+  if (!e || !e.range) return;
+
+  const r = e.range;
+  const sh = r.getSheet();
+
+  if (sh.getName() !== SHEET_NAME) return;
+  if (r.getColumn() !== STATUS_COL) return;
+  if (r.getNumRows() !== 1 || r.getNumColumns() !== 1) return;
+  if (r.getRow() < 2) return;
+
+  const status = clean_(e.value, 100);
+  const idx = STATUS.indexOf(status);
+
+  if (idx < 0) return;
+
+  const row = r.getRow();
+
+  const historyCell = sh.getRange(row, HISTORY_COL);
+  const history = safeHistory_(historyCell.getValue());
+
+  history[idx] = Date.now();
+
+  historyCell.setValue(JSON.stringify(history));
+
+  if (NOTIFY.indexOf(status) >= 0) {
+    const code = sh.getRange(row, 1).getValue();
+    const userId = clean_(sh.getRange(row, 10).getValue(), 100);
+
+    push_(
+      userId,
+      '📱 อัปเดตงานซ่อม #' + code +
+      '\nสถานะ: ' + status
+    );
+  }
+}
+
+/* -------------------- ตั้งค่าระบบ -------------------- */
+
+/**
+ * รัน setup() เพียง 1 ครั้ง
+ * สร้างชีตและติดตั้ง Trigger
+ */
+function setup() {
+  const sh = sheet_();
+
+  sh.setFrozenRows(1);
+
+  sh.getRange(
+    2,
+    STATUS_COL,
+    Math.max(sh.getMaxRows() - 1, 1),
+    1
+  ).setDataValidation(
+    SpreadsheetApp.newDataValidation()
+      .requireValueInList(STATUS, true)
+      .setAllowInvalid(false)
+      .build()
+  );
+
+  // ลบเฉพาะ Trigger ของ onSheetEdit
+  // ไม่ลบ Trigger งานอื่นในโปรเจกต์
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'onSheetEdit') {
+      ScriptApp.deleteTrigger(t);
+    }
+  });
+
+  ScriptApp.newTrigger('onSheetEdit')
+    .forSpreadsheet(SpreadsheetApp.getActive())
+    .onEdit()
+    .create();
+
+  console.log('ติดตั้งระบบเรียบร้อย');
+}
+
+/* -------------------- ทดสอบ LINE -------------------- */
+
+function testPush() {
+  const owner = String(
+    P.getProperty('OWNER_ID') || ''
+  ).split(',')[0].trim();
+
+  if (!owner) {
+    throw new Error('กรุณาตั้งค่า OWNER_ID ก่อน');
+  }
+
+  push_(owner, 'ทดสอบระบบแจ้งเตือนร้านซ่อมมือถือ');
+
+  console.log('ส่งคำสั่งทดสอบแล้ว กรุณาตรวจสอบ LINE');
+}
+
+/* -------------------- ตรวจสอบข้อมูล -------------------- */
+
+/**
+ * ดูจำนวนออเดอร์และจำนวนออเดอร์ที่มี userId
+ */
+function checkOrders() {
+  const sh = sheet_();
+  const lastRow = sh.getLastRow();
+
+  if (lastRow < 2) {
+    console.log('ยังไม่มีออเดอร์');
+    return;
+  }
+
+  const rows = sh
+    .getRange(2, 1, lastRow - 1, HEAD.length)
+    .getValues();
+
+  const total = rows.length;
+  const withUser = rows.filter(function (r) {
+    return clean_(r[9], 100) !== '';
+  }).length;
+
+  console.log('ออเดอร์ทั้งหมด: ' + total);
+  console.log('ออเดอร์ที่มี userId: ' + withUser);
+  console.log('ออเดอร์ที่ไม่มี userId: ' + (total - withUser));
+}
+```
