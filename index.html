@@ -31,13 +31,7 @@ body{
 }
 
 button,input,textarea{font:inherit}
-
-button{
-  cursor:pointer;
-  border:0;
-  transition:.2s;
-}
-
+button{cursor:pointer;border:0;transition:.2s}
 button:active{transform:scale(.97)}
 
 .w{
@@ -45,6 +39,8 @@ button:active{transform:scale(.97)}
   margin:auto;
   padding:16px 14px 35px;
 }
+
+.h{display:none!important}
 
 /* HEADER */
 
@@ -67,15 +63,8 @@ button:active{transform:scale(.97)}
   box-shadow:0 6px 18px #06c75535;
 }
 
-.brand-name{
-  font-size:19px;
-  font-weight:850;
-}
-
-.brand-desc{
-  color:var(--muted);
-  font-size:11px;
-}
+.brand-name{font-size:19px;font-weight:850}
+.brand-desc{color:var(--muted);font-size:11px}
 
 .help-btn{
   margin-left:auto;
@@ -130,11 +119,7 @@ button:active{transform:scale(.97)}
   box-shadow:var(--shadow);
 }
 
-.section-title{
-  font-size:18px;
-  font-weight:800;
-}
-
+.section-title{font-size:18px;font-weight:800}
 .section-desc{
   color:var(--muted);
   font-size:12px;
@@ -169,14 +154,8 @@ input:focus,textarea:focus{
   background:white;
 }
 
-textarea{
-  resize:vertical;
-  min-height:80px;
-}
-
-input::placeholder,textarea::placeholder{
-  color:#adb8b0;
-}
+textarea{resize:vertical;min-height:80px}
+input::placeholder,textarea::placeholder{color:#adb8b0}
 
 /* BUTTONS */
 
@@ -202,10 +181,7 @@ input::placeholder,textarea::placeholder{
   color:#245b3b;
 }
 
-.btn:disabled{
-  opacity:.55;
-  cursor:wait;
-}
+.btn:disabled{opacity:.55;cursor:wait}
 
 /* MAP */
 
@@ -231,7 +207,7 @@ input::placeholder,textarea::placeholder{
   margin-top:7px;
 }
 
-/* ORDER TIMELINE */
+/* TIMELINE */
 
 .tl{
   list-style:none;
@@ -268,17 +244,9 @@ input::placeholder,textarea::placeholder{
   background:#e5eee7;
 }
 
-.tl .d{
-  color:#245b3b;
-}
-
+.tl .d{color:#245b3b}
 .tl .d:before{background:var(--green)}
-
-.tl .n{
-  font-weight:800;
-  color:#2563eb;
-}
-
+.tl .n{font-weight:800;color:#2563eb}
 .tl .n:before{
   background:#2563eb;
   box-shadow:0 0 0 4px #2563eb20;
@@ -290,8 +258,6 @@ small{
   font-size:11px;
   margin-top:3px;
 }
-
-.h{display:none!important}
 
 /* LOADING */
 
@@ -312,10 +278,7 @@ small{
   pointer-events:none;
 }
 
-.loading-box{
-  text-align:center;
-  padding:30px;
-}
+.loading-box{text-align:center;padding:30px}
 
 .logo{
   width:85px;
@@ -341,13 +304,8 @@ small{
   margin:20px auto 10px;
 }
 
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-@keyframes float{
-  50%{transform:translateY(-6px)}
-}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{50%{transform:translateY(-6px)}}
 
 /* MODAL */
 
@@ -366,10 +324,7 @@ small{
   backdrop-filter:blur(5px);
 }
 
-.modal.show{
-  opacity:1;
-  visibility:visible;
-}
+.modal.show{opacity:1;visibility:visible}
 
 .modal-box{
   width:100%;
@@ -384,9 +339,7 @@ small{
   overflow:auto;
 }
 
-.modal.show .modal-box{
-  transform:translateY(0) scale(1);
-}
+.modal.show .modal-box{transform:translateY(0) scale(1)}
 
 .modal-icon{
   width:65px;
@@ -399,11 +352,7 @@ small{
   margin:0 auto 12px;
 }
 
-.modal-title{
-  text-align:center;
-  font-size:21px;
-  font-weight:850;
-}
+.modal-title{text-align:center;font-size:21px;font-weight:850}
 
 .modal-sub{
   text-align:center;
@@ -434,12 +383,7 @@ small{
 }
 
 .guide b{font-size:14px}
-
-.guide p{
-  font-size:12px;
-  color:#849188;
-  margin:3px 0 0;
-}
+.guide p{font-size:12px;color:#849188;margin:3px 0 0}
 
 .modal-actions{
   display:flex;
@@ -447,20 +391,10 @@ small{
   margin-top:18px;
 }
 
-.modal-actions button{
-  margin:0;
-  flex:1;
-}
+.modal-actions button{margin:0;flex:1}
 
-.close-modal{
-  background:#edf2ee;
-  color:#52645a;
-}
-
-.primary{
-  background:var(--green);
-  color:white;
-}
+.close-modal{background:#edf2ee;color:#52645a}
+.primary{background:var(--green);color:white}
 
 /* TOAST */
 
@@ -489,25 +423,6 @@ small{
   transform:translate(-50%,0);
 }
 
-/* FRIEND LINE */
-
-.friend-box{
-  background:linear-gradient(135deg,#eafff1,#f6fff8);
-  border:1px solid #d8f2e0;
-}
-
-.friend-link{
-  display:block;
-  margin-top:12px;
-  padding:13px;
-  border-radius:12px;
-  background:var(--green);
-  color:white;
-  text-align:center;
-  font-weight:800;
-  text-decoration:none;
-}
-
 @media(max-width:380px){
   .brand-name{font-size:17px}
   .c{padding:15px}
@@ -518,8 +433,7 @@ small{
 
 <body>
 
-<!-- LOADING SCREEN -->
-
+<!-- LOADING -->
 <div id="loading">
   <div class="loading-box">
     <div class="logo">🔧</div>
@@ -533,18 +447,14 @@ small{
 </div>
 
 <!-- TOAST -->
-
 <div id="toast"></div>
 
-<!-- TUTORIAL MODAL -->
-
+<!-- TUTORIAL -->
 <div class="modal" id="tutorial">
   <div class="modal-box">
 
     <div class="modal-icon">👋</div>
-
     <div class="modal-title">ยินดีต้อนรับ!</div>
-
     <div class="modal-sub">
       แจ้งซ่อมมือถือได้ง่าย ๆ ไม่ต้องเดินทาง
     </div>
@@ -581,25 +491,23 @@ small{
       </div>
     </div>
 
-    <div style="background:#eafff1;padding:12px;border-radius:13px;font-size:12px;color:#247447">
-      💚 เพิ่มเพื่อน LINE OA เพื่อรับการแจ้งเตือนสถานะงานซ่อม
-    </div>
-
     <div class="modal-actions">
-      <button class="btn close-modal" id="skipGuide">ไว้ทีหลัง</button>
-      <button class="btn primary" id="startGuide">เริ่มใช้งาน →</button>
+      <button class="btn close-modal" id="skipGuide">
+        ไว้ทีหลัง
+      </button>
+      <button class="btn primary" id="startGuide">
+        เริ่มใช้งาน →
+      </button>
     </div>
 
   </div>
 </div>
 
-<!-- SUCCESS MODAL -->
-
+<!-- SUCCESS -->
 <div class="modal" id="successModal">
   <div class="modal-box" style="text-align:center">
 
     <div class="modal-icon">🎉</div>
-
     <div class="modal-title">รับแจ้งซ่อมเรียบร้อย!</div>
 
     <p style="color:#82918a;font-size:13px">
@@ -620,56 +528,28 @@ small{
   </div>
 </div>
 
-
+<!-- MAIN -->
 <div class="w">
 
-  <!-- HEADER -->
-
   <div class="brand">
-
     <div class="brand-logo">🔧</div>
-
     <div>
       <div class="brand-name">ชะโอมไอที</div>
       <div class="brand-desc">บริการซ่อมมือถือ รับ-ส่งถึงที่</div>
     </div>
-
     <button id="helpBtn" class="help-btn">❔ วิธีใช้</button>
-
   </div>
-
-  <!-- TABS -->
 
   <div class="tabs">
     <button id="t1" class="on">🔧 แจ้งซ่อม</button>
     <button id="t2">📋 ออเดอร์ของฉัน</button>
   </div>
 
-  <!-- LINE FRIEND -->
-
-  <div id="fr" class="c friend-box h">
-
-    <b>🔔 รับแจ้งเตือนสถานะผ่าน LINE</b>
-
-    <p style="font-size:12px;color:#82918a">
-      เพิ่มร้านเป็นเพื่อน เพื่อรับข้อความเมื่อไรเดอร์ไปรับ-ส่งเครื่อง
-    </p>
-
-    <a id="fa" target="_blank" rel="noopener" class="friend-link">
-      เพิ่มเพื่อน LINE OA
-    </a>
-
-  </div>
-
-
-  <!-- PAGE 1 -->
-
+  <!-- REPAIR PAGE -->
   <div id="p1">
-
     <div class="c">
 
       <div class="section-title">🛠️ แจ้งซ่อมมือถือ</div>
-
       <div class="section-desc">
         กรอกข้อมูลเพื่อเรียกบริการรับเครื่องถึงที่
       </div>
@@ -681,8 +561,7 @@ small{
       <label>เบอร์โทรศัพท์</label>
       <input id="ph" type="tel"
         placeholder="เช่น 0891234567"
-        maxlength="10"
-        inputmode="numeric"
+        maxlength="10" inputmode="numeric"
         autocomplete="tel">
 
       <label>รุ่น / อาการเสีย</label>
@@ -694,7 +573,6 @@ small{
         placeholder="บ้านเลขที่ หมู่บ้าน ถนน ตำบล อำเภอ"></textarea>
 
       <label>📍 ปักหมุดตำแหน่งรับ-ส่ง</label>
-
       <div id="map"></div>
 
       <div class="map-tip">
@@ -712,38 +590,30 @@ small{
       <p id="msg" style="font-size:12px;color:#82918a"></p>
 
     </div>
-
   </div>
 
-
-  <!-- PAGE 2 -->
-
+  <!-- ORDERS PAGE -->
   <div id="p2" class="h"></div>
 
 </div>
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
 <script>
+"use strict";
 
 // ========================================
-// CONFIGURATION
+// CONFIG
 // ========================================
 
 const LIFF_ID = "2012349104-YQE03Zrt";
 
 const API = "https://script.google.com/macros/s/AKfycbz1VUs-awvQE7IoUOupZRn014N44hN2BoxhXG6HUQwKMg96HRYZ0UOq7o8qMxoWc1HT/exec";
 
-// พิกัดเริ่มต้นของแผนที่
-// แนะนำให้เปลี่ยนเป็นพิกัดร้าน
+// พิกัดเริ่มต้น แนะนำเปลี่ยนเป็นพิกัดร้าน
 const CENTER = [13.75,100.5];
-
 const ZOOM = 6;
-
-// LINE OA
-const OA_ADD = "https://line.me/R/ti/p/@373jzgho";
 
 const $ = id => document.getElementById(id);
 
@@ -752,21 +622,109 @@ let pin = null;
 let marker = null;
 let sig = "";
 let timers = [];
+let riderMaps = [];
 let toastTimer = null;
+let audioCtx = null;
+let soundEnabled = false;
+let orderLoading = false;
 
 
 // ========================================
-// API
+// HTML ESCAPE
 // ========================================
 
-const call = async data => {
-  const response = await fetch(API,{
-    method:"POST",
-    body:JSON.stringify(data)
-  });
+const esc = s => String(s ?? "").replace(
+  /[&<>"']/g,
+  c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c])
+);
 
-  return response.json();
-};
+
+// ========================================
+// AUDIO SYSTEM
+// ========================================
+
+// เบราว์เซอร์อนุญาตเสียงหลังผู้ใช้แตะหน้าจอ
+function enableSound(){
+
+  try{
+
+    if(!audioCtx){
+
+      const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+      if(!AudioContext) return;
+
+      audioCtx = new AudioContext();
+
+    }
+
+    if(audioCtx.state === "suspended"){
+      audioCtx.resume();
+    }
+
+    soundEnabled = true;
+
+  }catch(e){}
+
+}
+
+document.addEventListener(
+  "pointerdown",
+  enableSound,
+  {once:true}
+);
+
+
+// เสียง Popup
+function popupSound(type="normal"){
+
+  if(!soundEnabled || !audioCtx) return;
+
+  try{
+
+    const notes = type==="success"
+      ? [660,880,1100]
+      : [660,880];
+
+    notes.forEach((freq,i)=>{
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      const start = audioCtx.currentTime+i*.12;
+
+      osc.type = "sine";
+      osc.frequency.value = freq;
+
+      gain.gain.setValueAtTime(.0001,start);
+
+      gain.gain.exponentialRampToValueAtTime(
+        .12,start+.025
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        .0001,start+.18
+      );
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(start);
+      osc.stop(start+.2);
+
+    });
+
+  }catch(e){}
+
+}
 
 
 // ========================================
@@ -778,8 +736,9 @@ function showToast(message){
   const t = $("toast");
 
   t.textContent = message;
-
   t.classList.add("show");
+
+  popupSound("normal");
 
   clearTimeout(toastTimer);
 
@@ -795,16 +754,29 @@ function showToast(message){
 // ========================================
 
 function openModal(id){
+
   $(id).classList.add("show");
+
+  popupSound(
+    id==="successModal"
+      ? "success"
+      : "normal"
+  );
+
 }
 
 function closeModal(id){
+
   $(id).classList.remove("show");
+
 }
 
 function finishGuide(){
 
-  localStorage.setItem("chaoom_guide_seen","yes");
+  localStorage.setItem(
+    "chaoom_guide_seen",
+    "yes"
+  );
 
   closeModal("tutorial");
 
@@ -827,10 +799,9 @@ $("helpBtn").onclick = ()=>{
 };
 
 $("skipGuide").onclick = finishGuide;
-
 $("startGuide").onclick = finishGuide;
 
-$("tutorial").onclick = e => {
+$("tutorial").onclick = e=>{
 
   if(e.target === $("tutorial")){
     finishGuide();
@@ -854,6 +825,26 @@ $("successClose").onclick = ()=>{
 function hideLoading(){
 
   $("loading").classList.add("hide");
+
+}
+
+
+// ========================================
+// API
+// ========================================
+
+async function call(data){
+
+  const response = await fetch(API,{
+    method:"POST",
+    body:JSON.stringify(data)
+  });
+
+  if(!response.ok){
+    throw new Error("HTTP "+response.status);
+  }
+
+  return await response.json();
 
 }
 
@@ -897,12 +888,7 @@ function setPin(ll){
 
 }
 
-
-map.on("click",e=>{
-
-  setPin(e.latlng);
-
-});
+map.on("click",e=>setPin(e.latlng));
 
 
 // ========================================
@@ -932,7 +918,6 @@ $("gps").onclick = ()=>{
       );
 
       setPin(ll);
-
       map.setView(ll,17);
 
       $("gps").disabled = false;
@@ -969,11 +954,9 @@ $("gps").onclick = ()=>{
 function tab(n){
 
   $("p1").classList.toggle("h",n!==1);
-
   $("p2").classList.toggle("h",n!==2);
 
   $("t1").classList.toggle("on",n===1);
-
   $("t2").classList.toggle("on",n===2);
 
   if(n===1){
@@ -991,7 +974,6 @@ function tab(n){
 }
 
 $("t1").onclick = ()=>tab(1);
-
 $("t2").onclick = ()=>tab(2);
 
 
@@ -1002,13 +984,17 @@ $("t2").onclick = ()=>tab(2);
 $("go").onclick = async()=>{
 
   const name = $("nm").value.trim();
-
   const phone = $("ph").value.trim();
-
   const device = $("dv").value.trim();
-
   const address = $("ad").value.trim();
 
+  if(!uid){
+
+    showToast("กรุณารอเชื่อมต่อ LINE ก่อน");
+
+    return;
+
+  }
 
   if(!name || !phone || !device || !address){
 
@@ -1018,7 +1004,6 @@ $("go").onclick = async()=>{
 
   }
 
-
   if(!/^0[0-9]{9}$/.test(phone)){
 
     showToast("⚠️ กรุณาตรวจสอบเบอร์โทรศัพท์");
@@ -1027,44 +1012,32 @@ $("go").onclick = async()=>{
 
   }
 
-
   $("go").disabled = true;
-
   $("go").textContent = "⏳ กำลังส่งข้อมูล...";
-
 
   try{
 
     const r = await call({
 
       action:"create",
-
       userId:uid,
-
       name:name,
-
       phone:phone,
-
       device:device,
-
       address:address,
-
       lat:pin ? pin.lat : null,
-
       lng:pin ? pin.lng : null
 
     });
 
-
     if(r.ok){
 
-      $("successCode").textContent = r.code;
-
+      $("successCode").textContent = r.code || "-";
       $("msg").textContent = "";
 
-      openModal("successModal");
+      sig = "";
 
-      load(true);
+      openModal("successModal");
 
     }else{
 
@@ -1072,26 +1045,47 @@ $("go").onclick = async()=>{
 
     }
 
-
   }catch(e){
+
+    console.error(e);
 
     showToast("❌ ส่งข้อมูลไม่สำเร็จ กรุณาลองใหม่");
 
   }
 
-
   $("go").disabled = false;
-
   $("go").textContent = "ส่งข้อมูลแจ้งซ่อม →";
 
 };
 
 
 // ========================================
-// RIDER MAP TILES
+// CLEAR RIDER MAPS
 // ========================================
 
-const tiles = m => {
+function clearRiderMaps(){
+
+  timers.forEach(timer=>clearInterval(timer));
+  timers = [];
+
+  riderMaps.forEach(m=>{
+
+    try{
+      m.remove();
+    }catch(e){}
+
+  });
+
+  riderMaps = [];
+
+}
+
+
+// ========================================
+// RIDER TILE
+// ========================================
+
+function tiles(m){
 
   L.tileLayer(
     "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -1101,42 +1095,56 @@ const tiles = m => {
     }
   ).addTo(m);
 
-};
+}
 
 
 // ========================================
 // LOAD ORDERS
 // ========================================
 
-async function load(first){
+async function load(first=false){
+
+  if(!uid || orderLoading) return;
+
+  orderLoading = true;
 
   try{
 
     const r = await call({
 
       action:"mine",
-
       userId:uid
 
     });
 
-    if(!r.ok && !r.orders){
+    if(!r || !Array.isArray(r.orders)){
 
-      throw new Error("โหลดข้อมูลไม่สำเร็จ");
+      throw new Error(
+        "ข้อมูล orders ไม่ถูกต้องจากระบบหลังบ้าน"
+      );
 
     }
 
-    const orders = r.orders || [];
+    const orders = r.orders;
+    const steps = Array.isArray(r.steps)
+      ? r.steps
+      : [];
 
-    const s = JSON.stringify(orders);
+    const s = JSON.stringify({
+      orders:orders,
+      steps:steps
+    });
 
-    if(s===sig && !first) return;
+    if(s===sig && !first){
+
+      orderLoading = false;
+      return;
+
+    }
 
     sig = s;
 
-    timers.forEach(clearInterval);
-
-    timers = [];
+    clearRiderMaps();
 
 
     if(!orders.length){
@@ -1160,16 +1168,21 @@ async function load(first){
         </div>
       `;
 
+      orderLoading = false;
       return;
 
     }
 
 
-    $("p2").innerHTML = orders.map(o=>{
+    $("p2").innerHTML = orders.map((o,index)=>{
 
-      const lv = o.step==1 || o.step==5;
+      const step = Number(o.step);
 
-      const safeCode = esc(o.code);
+      // ตามสถานะเดิมของระบบหลังบ้าน
+      const lv = step===1 || step===5;
+
+      const mapId = "rider_map_"+index;
+      const errorId = "rider_error_"+index;
 
       return `
 
@@ -1178,7 +1191,7 @@ async function load(first){
           <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
 
             <b style="color:#079b48">
-              #${safeCode}
+              #${esc(o.code)}
             </b>
 
             <span style="font-size:11px;color:#82918a">
@@ -1193,24 +1206,26 @@ async function load(first){
 
           <ul class="tl">
 
-            ${r.steps.map((t,i)=>`
+            ${steps.map((t,i)=>`
 
               <li class="${
-                i<o.step ? "d" :
-                i==o.step ? "n" : ""
+                i<step ? "d" :
+                i===step ? "n" : ""
               }">
 
                 ${esc(t)}
 
                 ${
-                  o.history && o.history[i]
+                  Array.isArray(o.history) && o.history[i]
                   ? `<small>
-                      ${new Date(o.history[i]).toLocaleString(
-                        "th-TH",
-                        {
-                          dateStyle:"short",
-                          timeStyle:"short"
-                        }
+                      ${esc(
+                        new Date(o.history[i]).toLocaleString(
+                          "th-TH",
+                          {
+                            dateStyle:"short",
+                            timeStyle:"short"
+                          }
+                        )
                       )}
                     </small>`
                   : ""
@@ -1229,9 +1244,9 @@ async function load(first){
                 🛵 ตำแหน่งไรเดอร์
               </div>
 
-              <div class="lm" id="m_${safeCode}"></div>
+              <div class="lm" id="${mapId}"></div>
 
-              <small id="e_${safeCode}">
+              <small id="${errorId}">
                 กำลังเชื่อมต่อ...
               </small>
             `
@@ -1245,14 +1260,24 @@ async function load(first){
     }).join("");
 
 
-    orders
-      .filter(o=>o.step==1 || o.step==5)
-      .forEach(o=>live(o.code));
+    // สร้างแผนที่หลังจาก HTML แสดงเสร็จ
+    orders.forEach((o,index)=>{
+
+      if(Number(o.step)===1 || Number(o.step)===5){
+
+        live(o.code,index);
+
+      }
+
+    });
 
 
   }catch(e){
 
+    console.error("LOAD ORDER ERROR:",e);
+
     $("p2").innerHTML = `
+
       <div class="c" style="text-align:center">
 
         <div style="font-size:35px">⚠️</div>
@@ -1260,7 +1285,7 @@ async function load(first){
         <b>โหลดข้อมูลไม่สำเร็จ</b>
 
         <p style="font-size:12px;color:#82918a">
-          กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่
+          ${esc(e.message || "กรุณาลองใหม่")}
         </p>
 
         <button class="btn btn-secondary"
@@ -1269,7 +1294,12 @@ async function load(first){
         </button>
 
       </div>
+
     `;
+
+  }finally{
+
+    orderLoading = false;
 
   }
 
@@ -1280,9 +1310,9 @@ async function load(first){
 // RIDER LIVE LOCATION
 // ========================================
 
-function live(code){
+function live(code,index){
 
-  const mapId = "m_"+code;
+  const mapId = "rider_map_"+index;
 
   const mEl = $(mapId);
 
@@ -1290,15 +1320,15 @@ function live(code){
 
   const m = L.map(mapId);
 
+  riderMaps.push(m);
+
   tiles(m);
 
   let rm = null;
-
   let cm = null;
-
   let fit = false;
 
-  const e = $("e_"+code);
+  const e = $("rider_error_"+index);
 
 
   const tick = async()=>{
@@ -1308,9 +1338,7 @@ function live(code){
       const r = await call({
 
         action:"loc",
-
         userId:uid,
-
         code:code
 
       });
@@ -1318,8 +1346,7 @@ function live(code){
       if(!r.ok) return;
 
 
-      // CUSTOMER PIN
-
+      // จุดรับเครื่องของลูกค้า
       if(r.pin && !cm){
 
         cm = L.marker([
@@ -1330,15 +1357,13 @@ function live(code){
       }
 
 
-      // RIDER LOCATION
-
+      // ตำแหน่งไรเดอร์
       if(r.loc){
 
         const ll = [
           r.loc.lat,
           r.loc.lng
         ];
-
 
         if(rm){
 
@@ -1351,11 +1376,8 @@ function live(code){
             icon:L.divIcon({
 
               html:"🛵",
-
               className:"",
-
               iconSize:[30,30],
-
               iconAnchor:[15,15]
 
             })
@@ -1391,12 +1413,11 @@ function live(code){
         if(e){
 
           e.textContent =
-            (r.rider || "ไรเดอร์") +
-            " · อัปเดต " +
+            (r.rider || "ไรเดอร์")+
+            " · อัปเดต "+
             new Date(r.loc.t).toLocaleTimeString("th-TH");
 
         }
-
 
       }else if(!fit){
 
@@ -1411,7 +1432,8 @@ function live(code){
 
         if(e){
 
-          e.textContent = "รอไรเดอร์เริ่มแชร์ตำแหน่ง...";
+          e.textContent =
+            "รอไรเดอร์เริ่มแชร์ตำแหน่ง...";
 
         }
 
@@ -1419,7 +1441,9 @@ function live(code){
 
     }catch(x){
 
-      // รอรอบถัดไป
+      if(e){
+        e.textContent = "กำลังรอตำแหน่งไรเดอร์...";
+      }
 
     }
 
@@ -1428,55 +1452,29 @@ function live(code){
 
   tick();
 
-  timers.push(setInterval(tick,8000));
+  timers.push(
+    setInterval(tick,8000)
+  );
 
 }
 
 
 // ========================================
-// AUTO REFRESH
+// AUTO REFRESH ORDERS
 // ========================================
 
 setInterval(()=>{
 
-  if(uid && !$("p2").classList.contains("h")){
+  if(
+    uid &&
+    !$("p2").classList.contains("h")
+  ){
 
-    load();
+    load(false);
 
   }
 
 },15000);
-
-
-// ========================================
-// LINE OA FRIEND CHECK
-// ========================================
-
-async function chk(){
-
-  try{
-
-    const f = await liff.getFriendship();
-
-    if(f.friendFlag){
-
-      $("fr").classList.add("h");
-
-    }else{
-
-      $("fa").href = OA_ADD;
-
-      $("fr").classList.remove("h");
-
-    }
-
-  }catch(e){
-
-    // ไม่สามารถตรวจสอบสถานะเพื่อนได้
-
-  }
-
-}
 
 
 // ========================================
@@ -1489,7 +1487,15 @@ document.addEventListener(
 
     if(!document.hidden){
 
-      if(uid) chk();
+      if(uid && !$("p2").classList.contains("h")){
+
+        load(true);
+
+      }
+
+      if(audioCtx && audioCtx.state==="suspended"){
+        audioCtx.resume().catch(()=>{});
+      }
 
     }
 
@@ -1507,7 +1513,6 @@ liff.init({
 
 }).then(async()=>{
 
-
   if(!liff.isLoggedIn()){
 
     liff.login();
@@ -1516,35 +1521,26 @@ liff.init({
 
   }
 
-
   const p = await liff.getProfile();
 
   uid = p.userId;
 
   $("nm").value = p.displayName || "";
 
-
-  await chk();
-
-
-  // ซ่อนหน้าโหลด
-
   hideLoading();
-
-
-  // คู่มือครั้งแรก
 
   showGuideFirstTime();
 
-
 }).catch(e=>{
+
+  console.error("LIFF ERROR:",e);
 
   hideLoading();
 
-  showToast("ไม่สามารถเชื่อมต่อ LINE ได้");
-
   $("msg").textContent =
-    "เปิดผ่านแอป LINE เท่านั้น";
+    "ไม่สามารถเชื่อมต่อ LINE ได้ กรุณาเปิดผ่านแอป LINE";
+
+  showToast("ไม่สามารถเชื่อมต่อ LINE ได้");
 
 });
 
