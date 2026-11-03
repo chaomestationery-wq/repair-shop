@@ -1,0 +1,13 @@
+<!doctype html><html><head><base target="_top"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{font:16px system-ui,sans-serif;background:#f5f3ee;margin:0;padding:16px}.c{max-width:420px;margin:30px auto;background:#fff;border-radius:14px;padding:18px;text-align:center}.b{font-size:22px;font-weight:700;margin:10px 0}.ok{color:#0f766e}.no{color:#b91c1c}input,button{font:inherit;padding:10px;border-radius:8px;border:1px solid #ccc;width:100%;box-sizing:border-box;margin-top:8px}</style></head>
+<body><div class="c" id="o">กำลังตรวจสอบ...</div>
+<script>
+const Q=<?!= q ?>,o=document.getElementById('o'),E=s=>String(s==null?'':s).replace(/[&<>]/g,'');
+const run=(f,...a)=>new Promise(r=>google.script.run.withSuccessHandler(r)[f](...a));
+(async()=>{
+if(Q.w){const r=await run('check',Q.w),on=r.left>=0&&!r.void;
+ o.innerHTML=r.none?'<div class="b no">ไม่พบข้อมูลประกัน</div>':`<h3>${E(r.shop)}</h3><div class="b ${on?'ok':'no'}">${r.void?'ประกันถูกยกเลิก':on?'อยู่ในประกัน':'หมดประกันแล้ว'}</div>${E(r.device)}<br>${E(r.item)}<br>${r.start} ถึง ${r.end}<br>${on?'เหลืออีก '+r.left+' วัน':''}<br><small>รหัส ${E(r.code)} • คุณ ${E(r.name)}</small>`}
+else o.innerHTML=`<h3>สถานะงานซ่อม ${E(Q.j)}</h3>เบอร์โทร 4 ตัวท้าย<input id="t" maxlength="4" inputmode="numeric"><button onclick="go()">ตรวจสอบ</button><div id="r"></div>`;
+})();
+async function go(){const r=await run('repairStatus',Q.j,document.getElementById('t').value);document.getElementById('r').innerHTML=r?`<div class="b ok">${E(r.status)}</div>${E(r.device)}<br>นัดรับ ${E(r.due||'-')}`:'<div class="b no">ไม่พบข้อมูล</div>'}
+</script></body></html>
