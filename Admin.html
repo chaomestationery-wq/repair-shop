@@ -1,0 +1,65 @@
+<!doctype html><html><head><base target="_top"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ระบบรับซ่อม</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style id="pg"></style>
+<style>
+:root{--a:#0f766e}
+body{font:15px system-ui,sans-serif;margin:0;background:#f5f3ee;color:#222}
+header{background:var(--a);color:#fff;padding:10px 14px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+header b{flex:1}header select{width:auto}
+nav button{background:#fff3;color:#fff;border:0;width:auto}nav button.on{background:#fff;color:var(--a)}
+main{max-width:760px;margin:auto;padding:12px}
+label{display:block;margin:8px 0;font-size:13px;color:#555}
+input,select,textarea,button{font:inherit;padding:9px;border:1px solid #ccc;border-radius:8px;width:100%;box-sizing:border-box}
+textarea{height:60px}button.p{background:var(--a);color:#fff;border:0;margin-top:8px}
+.c{background:#fff;border-radius:10px;padding:10px;margin:8px 0}.c button,.c select{width:auto;margin:4px 4px 0 0}
+#p{display:none}.z80{width:72mm;font-size:12px}.zA5,.zA4{font-size:14px}
+#p h2,#p h3{margin:2px 0;text-align:center}#p td{padding:2px 4px;vertical-align:top}#q{width:96px;margin:6px auto}
+@media print{header,main,#lg{display:none!important}#p{display:block}}
+</style></head><body>
+<div id="lg" style="max-width:300px;margin:80px auto;padding:16px"><h3>เข้าสู่ระบบ</h3><input id="pin" type="password" placeholder="PIN"><button class="p" onclick="login()">เข้า</button></div>
+<div id="app" hidden>
+<header><b id="sn"></b><select id="sz"><option value="80">สลิป 80mm</option><option>A5</option><option>A4</option></select>
+<nav><button data-t="o">ออนไลน์</button> <button data-t="r">รับซ่อม</button> <button data-t="l">งานซ่อม</button> <button data-t="w">ใบประกัน</button> <button data-t="s">ตั้งค่า</button></nav></header>
+<main>
+<section class="t" id="tr"><div id="rf"></div><button class="p" onclick="sr()">บันทึก + พิมพ์ใบรับซ่อม</button></section>
+<section class="t" id="to" hidden><div id="ol"></div></section>
+<section class="t" id="tl" hidden><input id="qr" placeholder="ค้นหา ชื่อ/เบอร์/เลขที่งาน/IMEI" oninput="lr()"><div id="rl"></div></section>
+<section class="t" id="tw" hidden><div id="wf"></div>
+<label>ระยะประกัน<select id="w_days"><option value="7">7 วัน</option><option value="15">15 วัน</option><option value="30" selected>30 วัน</option><option value="90">3 เดือน</option><option value="180">6 เดือน</option><option value="365">1 ปี</option></select></label>
+<button class="p" onclick="sw()">ออกใบรับประกัน + พิมพ์</button><h4>ใบรับประกันที่ออกแล้ว</h4><div id="wl"></div></section>
+<section class="t" id="ts" hidden><div id="sf"></div><button class="p" onclick="ss()">บันทึกตั้งค่า</button>
+<label>เปลี่ยน PIN (ค่าเริ่มต้น 1234)<input id="np" type="password"></label><button onclick="sp()">เปลี่ยน PIN</button></section>
+</main></div>
+<div id="p"></div>
+<script>
+let PIN,C,U,L=[],W=[],O=[],OC='';const S=['รับเรื่องแล้ว','กำลังไปรับเครื่อง','รับเครื่องแล้ว','กำลังซ่อม','ซ่อมเสร็จ','กำลังนำส่ง','ส่งมอบแล้ว'];
+const $=s=>document.querySelector(s),V=k=>$('#'+k).value;
+const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const rpc=(f,...a)=>new Promise((o,n)=>google.script.run.withSuccessHandler(o).withFailureHandler(e=>{alert(e.message);n(e)})[f](PIN,...a));
+const F=(p,a)=>a.map(([k,l,t])=>`<label>${l}`+(t=='ta'?`<textarea id="${p+k}"></textarea>`:`<input id="${p+k}" ${t||''}>`)+'</label>').join('');
+const G=(p,a)=>Object.fromEntries(a.map(x=>[x[0],V(p+x[0])]));
+const RF=[['name','ชื่อลูกค้า'],['phone','เบอร์โทร','type=tel'],['device','ยี่ห้อ/รุ่น'],['imei','IMEI/Serial'],['problem','อาการเสีย','ta'],['cond','สภาพเครื่อง/อุปกรณ์ที่ฝาก','ta'],['pass','รหัสปลดล็อก (ไม่พิมพ์ในใบ)'],['est','ราคาประเมิน','type=number'],['dep','มัดจำ','type=number'],['due','นัดรับ','type=date']];
+const WF=[['job','เลขที่งานซ่อม (ถ้ามี)'],['name','ชื่อลูกค้า'],['phone','เบอร์โทร','type=tel'],['device','เครื่อง/IMEI'],['item','รายการที่รับประกัน (เช่น เปลี่ยนจอ)'],['price','ราคา','type=number'],['terms','เงื่อนไข','ta']];
+const SF=[['shop','ชื่อร้าน'],['tel','เบอร์ร้าน'],['addr','ที่อยู่'],['terms','เงื่อนไขใบประกัน','ta'],['rterms','เงื่อนไขใบรับซ่อม','ta']];
+$('#rf').innerHTML=F('r_',RF);$('#wf').innerHTML=F('w_',WF);$('#sf').innerHTML=F('s_',SF);
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>tab(b.dataset.t));
+function tab(x){document.querySelectorAll('.t').forEach(e=>e.hidden=e.id!='t'+x);document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==x));if(x=='o')lo();if(x=='l')lr();if(x=='w')lw()}
+async function login(){PIN=V('pin');const r=await rpc('login');U=r.url;C=r.cfg;$('#lg').hidden=true;$('#app').hidden=false;$('#sn').textContent=C.shop;SF.forEach(x=>$('#s_'+x[0]).value=C[x[0]]);$('#w_terms').value=C.terms;tab('r')}
+const T=a=>'<table>'+a.map(([k,v])=>`<tr><td>${k}</td><td>${esc(v)}</td></tr>`).join('')+'</table>';
+function doc(k,o){const h=`<h2>${esc(C.shop)}</h2><div style="text-align:center">${esc(C.tel+' '+C.addr)}</div>`;
+return k=='r'?h+'<h3>ใบรับซ่อม</h3>'+T([['เลขที่',o.job],['วันที่',o.date],['ลูกค้า',o.name+' '+o.phone],['เครื่อง',o.device+' '+o.imei],['อาการ',o.problem],['สภาพ/อุปกรณ์',o.cond],['ประเมิน/มัดจำ',o.est+' / '+o.dep+' บาท'],['นัดรับ',o.due]])+`<p style="font-size:.85em">${esc(C.rterms)}</p><p>ลงชื่อลูกค้า ____________</p><div>สแกนดูสถานะงาน</div>`
+:h+'<h3>ใบรับประกัน</h3>'+T([['รหัส',o.code],['วันที่ออก',o.date],['ลูกค้า',o.name],['เครื่อง',o.device],['รับประกัน',o.item],['ระยะเวลา',o.days+' วัน'],['ช่วงประกัน',o.start+' ถึง '+o.end],['ราคา',o.price+' บาท']])+`<p style="font-size:.85em">${esc(o.terms)}</p><div>สแกนตรวจสอบประกัน</div>`}
+function pr(h,url){const s=V('sz');$('#pg').textContent=`@page{size:${s=='80'?'80mm auto':s};margin:4mm}`;$('#p').className='z'+s;$('#p').innerHTML=h+'<div id="q"></div>';new QRCode($('#q'),{text:url,width:96,height:96});setTimeout(()=>print(),400)}
+async function sr(){const o=G('r_',RF);if(!o.name||!o.device)return alert('กรอกชื่อลูกค้าและรุ่นเครื่อง');o.online=OC;const r=await rpc('saveRepair',o);OC='';pr(doc('r',r),U+'?j='+r.job);RF.forEach(x=>$('#r_'+x[0]).value='')}
+async function lo(){O=await rpc('onlineList');$('#ol').innerHTML=O.length?O.map((x,i)=>`<div class="c"><b>${x.code}</b> ${esc(x.name)} ${esc(x.phone)}<br>${esc(x.device)}<br>${esc(x.address)} ${x.map?`<a href="${esc(x.map)}" target="_blank">แผนที่</a>`:''}<br><small>${esc(x.time)} • ${esc(x.status)}</small><br><button onclick="ofill(${i})">เปิดงานซ่อม</button></div>`).join(''):'<div class="c">ไม่มีออเดอร์ออนไลน์ที่รอเปิดงาน</div>'}
+function ofill(i){const x=O[i];OC=x.code;tab('r');$('#r_name').value=x.name;$('#r_phone').value=x.phone;$('#r_device').value=x.device;$('#r_problem').value='แจ้งออนไลน์ #'+x.code}
+async function lr(){L=await rpc('list','Repairs',V('qr'));$('#rl').innerHTML=L.map((x,i)=>`<div class="c"><b>${x.job}</b> ${esc(x.name)} ${esc(x.phone)}<br>${esc(x.device)} — ${esc(x.problem)}<br><select onchange="st(${i},this.value)">${S.map(s=>`<option${s==x.status?' selected':''}>${s}</option>`).join('')}</select><button onclick="pr(doc('r',L[${i}]),U+'?j='+L[${i}].job)">พิมพ์ใบรับซ่อม</button><button onclick="wfill(${i})">ออกประกัน</button></div>`).join('')}
+async function st(i,s){let f='';if(s=='ซ่อมเสร็จ'||s=='ส่งมอบแล้ว')f=prompt('ราคาจริง (บาท)',L[i].final||L[i].est)||'';await rpc('setStatus',L[i].job,s,f);L[i].status=s}
+function wfill(i){const x=L[i];tab('w');$('#w_job').value=x.job;$('#w_name').value=x.name;$('#w_phone').value=x.phone;$('#w_device').value=x.device+' '+x.imei;$('#w_price').value=x.final||x.est}
+async function sw(){const o=G('w_',WF);o.days=V('w_days');if(!o.name||!o.item)return alert('กรอกชื่อและรายการที่รับประกัน');const r=await rpc('issueWarranty',o);pr(doc('w',r),U+'?w='+r.code);lw()}
+async function lw(){W=await rpc('list','Warranty','');$('#wl').innerHTML=W.map((x,i)=>`<div class="c"><b>${x.code}</b> ${esc(x.name)} — ${esc(x.item)}<br>หมด ${x.end} • ${x.status}<br><button onclick="pr(doc('w',W[${i}]),U+'?w='+W[${i}].code)">พิมพ์ซ้ำ</button><button onclick="vw('${x.code}')">ยกเลิก</button></div>`).join('')}
+async function vw(c){if(confirm('ยกเลิกใบประกัน '+c+'?')){await rpc('voidWarranty',c);lw()}}
+async function ss(){const o=G('s_',SF);await rpc('saveCfg',o);C=o;$('#sn').textContent=o.shop;alert('บันทึกแล้ว')}
+async function sp(){await rpc('setPin',V('np'));PIN=V('np');alert('เปลี่ยน PIN แล้ว')}
+</script></body></html>
