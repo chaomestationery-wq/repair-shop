@@ -17,6 +17,7 @@ button.s{background:#eef1f5;color:#1b2430}#map{height:260px;border-radius:10px}
 #map,.lm{height:260px;border-radius:10px}.lm{height:200px;margin-top:8px}small{color:#8a96a6;margin-left:6px}.h{display:none}
 </style></head><body><div class="w">
 <div class="tabs"><button id="t1" class="on">แจ้งซ่อม</button><button id="t2">ออเดอร์ของฉัน</button></div>
+<div id="fr" class="c h"><b>🔔 รับแจ้งเตือนสถานะใน LINE</b><br>เพิ่มร้านเป็นเพื่อน เพื่อรับข้อความตอนไรเดอร์ไปรับ-ส่งเครื่อง<a id="fa" target="_blank" rel="noopener" style="display:block;margin-top:10px;padding:12px;border-radius:10px;background:#06c755;color:#fff;text-align:center;font-weight:700;text-decoration:none">เพิ่มเพื่อน</a></div>
 <div id="p1"><div class="c">
 <label>ชื่อ</label><input id="nm"><label>เบอร์โทร</label><input id="ph" type="tel">
 <label>รุ่น / อาการเสีย</label><textarea id="dv"></textarea>
@@ -46,7 +47,7 @@ $("go").onclick=async()=>{
  try{const r=await call({action:"create",userId:uid,name:$("nm").value,phone:$("ph").value,device:$("dv").value,address:$("ad").value,lat:pin?pin.lat:null,lng:pin?pin.lng:null});
   $("msg").textContent=r.ok?"✅ รับเรื่องแล้ว รหัส "+r.code+" — ดูสถานะที่แท็บ 'ออเดอร์ของฉัน'":"❌ "+r.error;
  }catch(e){$("msg").textContent="❌ ส่งไม่สำเร็จ ลองใหม่อีกครั้ง"}
- $("go").disabled=false};
+ $("go").disabled=false;chk()};
 let sig="",timers=[];
 const tiles=m=>L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
 async function load(first){
@@ -70,8 +71,11 @@ function live(code){
  }catch(x){}};
  tick();timers.push(setInterval(tick,8000))}
 setInterval(()=>{if(!$("p2").classList.contains("h"))load()},15000);
+const OA_ADD="https://line.me/R/ti/p/@yourshop"; // เปลี่ยน @yourshop เป็น Basic ID ของ OA ร้าน
+async function chk(){try{const f=await liff.getFriendship();if(f.friendFlag)$("fr").classList.add("h");else{$("fa").href=OA_ADD;$("fr").classList.remove("h")}}catch(e){}}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)chk()});
 liff.init({liffId:LIFF_ID}).then(async()=>{
  if(!liff.isLoggedIn()){liff.login();return}
- const p=await liff.getProfile();uid=p.userId;$("nm").value=p.displayName||"";
+ const p=await liff.getProfile();uid=p.userId;$("nm").value=p.displayName||"";chk();
 }).catch(e=>$("msg").textContent="เปิดผ่านแอป LINE เท่านั้น");
 </script></body></html>
