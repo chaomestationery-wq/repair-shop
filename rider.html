@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>หน้าไรเดอร์ / พนักงาน</title>
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#f4f6f8;color:#1b2430}
+.w{max-width:560px;margin:auto;padding:14px}.c{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px}
+input{width:100%;box-sizing:border-box;padding:10px;margin:6px 0;border:1px solid #ccd3dc;border-radius:10px;font:inherit}
+button,.b{display:block;width:100%;box-sizing:border-box;padding:14px;margin-top:10px;border:0;border-radius:10px;background:#06c755;color:#fff;font:inherit;font-weight:700;text-align:center;text-decoration:none}
+.s{background:#eef1f5;color:#1b2430}.chip{display:inline-block;padding:2px 10px;border-radius:99px;background:#2563eb;color:#fff;font-size:13px}
+.card{cursor:pointer}.g{font-size:13px;color:#66758a}.h{display:none}
+</style></head><body><div class="w">
+<h2 style="margin:4px 0">🛵 งานรับ-ส่ง</h2>
+<div id="login" class="c h"><b>เข้าสู่ระบบ</b>
+<input id="rn" placeholder="ชื่อของคุณ"><input id="rk" type="password" placeholder="รหัสผ่านที่ร้านให้">
+<button id="lb">เข้าสู่ระบบ</button></div>
+<div id="app" class="h"><div class="g" id="gps"></div><div id="v"></div>
+<button class="s" id="rf">รีเฟรช</button></div>
+</div>
+<script>
+const API="ใส่ URL ของ Apps Script Web app (ลงท้าย /exec)";
+const $=i=>document.getElementById(i), esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let key=localStorage.getItem("rk")||"", me=localStorage.getItem("rn")||"";
+let data=[],steps=[],cur=new URLSearchParams(location.search).get("code"),watch=null,tm=null,wake=null,last=null,share=[];
+const call=b=>fetch(API,{method:"POST",body:JSON.stringify(Object.assign({key},b))}).then(r=>r.json());
+$("lb").onclick=()=>{me=$("rn").value.trim();key=$("rk").value.trim();if(!me||!key)return;
+ localStorage.setItem("rn",me);localStorage.setItem("rk",key);refresh()};
+$("rf").onclick=refresh;
+async function refresh(){
+ try{const r=await call({action:"r_list"});
+  if(!r.ok){localStorage.removeItem("rk");key="";$("login").classList.remove("h");$("app").classList.add("h");return}
+  steps=r.steps;data=r.orders;$("login").classList.add("h");$("app").classList.remove("h");render();sync();
+ }catch(e){$("v").innerHTML='<div class="c">เชื่อมต่อไม่ได้ ลองรีเฟรช</div>'}}
+function render(){
+ const o=cur&&data.find(x=>x.code===cur);
+ if(cur&&!o){$("v").innerHTML='<div class="c">ออเดอร์ #'+esc(cur)+' ปิดงานแล้วหรือไม่พบ</div><button class="s" onclick="cur=null;render()">กลับ</button>';return}
+ if(o){const n=o.step<6?steps[o.step+1]:"";
+  $("v").innerHTML='<div class="c"><b>#'+esc(o.code)+'</b> <span class="chip">'+steps[o.step]+'</span>'+(o.rider?' <span class="g">ไรเดอร์: '+esc(o.rider)+'</span>':'')+
+   '<p><b>'+esc(o.name)+'</b><br>'+esc(o.device)+'<br>'+esc(o.address)+'</p>'+
+   '<a class="b s" href="tel:'+esc(o.phone)+'">📞 โทร '+esc(o.phone)+'</a>'+
+   (o.map?'<a class="b s" target="_blank" rel="noopener" href="'+esc(o.map)+'">🧭 นำทาง</a>':'')+
+   (n?'<button onclick="next(\''+o.code+'\','+o.step+')">'+(o.step===0?'✅ รับออเดอร์นี้':'➡️ '+n)+'</button>':'')+
+   '</div><button class="s" onclick="cur=null;render()">← กลับรายการ</button>';return}
+ $("v").innerHTML=data.length?data.map(o=>'<div class="c card" onclick="cur=\''+o.code+'\';render()"><b>#'+esc(o.code)+'</b> '+esc(o.name)+
+  ' <span class="chip">'+steps[o.step]+'</span><div class="g">'+esc(o.device)+(o.rider?' · '+esc(o.rider):'')+'</div></div>').join(""):'<div class="c">ไม่มีงานค้าง</div>'}
+async function next(code,from){
+ const r=await call({action:"r_next",code,from,rider:me});
+ if(!r.ok)alert(r.error);await refresh()}
+/* แชร์ตำแหน่งอัตโนมัติ เมื่อเราเป็นคนรับงานและอยู่ขั้น "กำลังไปรับ/กำลังนำส่ง" */
+function sync(){
+ share=data.filter(o=>o.rider===me&&(o.step===1||o.step===5)).map(o=>o.code);
+ if(share.length&&watch===null){
+  watch=navigator.geolocation.watchPosition(p=>last={lat:p.coords.latitude,lng:p.coords.longitude},()=>{$("gps").textContent="⚠️ ไม่ได้รับสิทธิ์ตำแหน่ง"},{enableHighAccuracy:true});
+  tm=setInterval(()=>{if(last)share.forEach(c=>call({action:"r_loc",code:c,lat:last.lat,lng:last.lng}))},10000);
+  if(navigator.wakeLock)navigator.wakeLock.request("screen").then(w=>wake=w).catch(()=>{})}
+ if(!share.length&&watch!==null){navigator.geolocation.clearWatch(watch);clearInterval(tm);watch=null;if(wake)wake.release();wake=null}
+ $("gps").textContent=share.length?"📡 กำลังแชร์ตำแหน่งให้ลูกค้า — เปิดหน้านี้ค้างไว้":""}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&watch!==null&&navigator.wakeLock)navigator.wakeLock.request("screen").then(w=>wake=w).catch(()=>{})});
+setInterval(()=>{if(key&&!document.hidden)refresh()},20000);
+if(key&&me)refresh();else $("login").classList.remove("h");
+</script></body></html>

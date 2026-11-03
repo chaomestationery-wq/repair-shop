@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>แจ้งซ่อมมือถือ รับ-ส่งถึงที่</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#f4f6f8;color:#1b2430}
+.w{max-width:560px;margin:auto;padding:14px}.c{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px}
+label{display:block;font-weight:600;margin:10px 0 4px}
+input,textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #ccd3dc;border-radius:10px;font:inherit}
+button{width:100%;padding:12px;margin-top:10px;border:0;border-radius:10px;background:#06c755;color:#fff;font:inherit;font-weight:700}
+button.s{background:#eef1f5;color:#1b2430}#map{height:260px;border-radius:10px}
+.tabs{display:flex;gap:6px;margin-bottom:10px}.tabs button{margin:0;background:#fff;color:#1b2430}.tabs .on{background:#06c755;color:#fff}
+.tl{list-style:none;padding:0;margin:8px 0 0}.tl li{padding:2px 0 8px 22px;position:relative;color:#8a96a6}
+.tl li:before{content:"";position:absolute;left:3px;top:7px;width:10px;height:10px;border-radius:50%;background:#ccd3dc}
+.tl .d{color:#1b2430}.tl .d:before{background:#06c755}.tl .n{font-weight:700;color:#1b2430}.tl .n:before{background:#2563eb}
+#map,.lm{height:260px;border-radius:10px}.lm{height:200px;margin-top:8px}small{color:#8a96a6;margin-left:6px}.h{display:none}
+</style></head><body><div class="w">
+<div class="tabs"><button id="t1" class="on">แจ้งซ่อม</button><button id="t2">ออเดอร์ของฉัน</button></div>
+<div id="p1"><div class="c">
+<label>ชื่อ</label><input id="nm"><label>เบอร์โทร</label><input id="ph" type="tel">
+<label>รุ่น / อาการเสีย</label><textarea id="dv"></textarea>
+<label>ที่อยู่รับ-ส่ง</label><textarea id="ad"></textarea>
+<label>ปักหมุด (แตะแผนที่ หรือลากหมุด)</label><div id="map"></div>
+<button class="s" id="gps">📍 ใช้ตำแหน่งปัจจุบัน</button>
+<button id="go">ส่งข้อมูลแจ้งซ่อม</button><p id="msg"></p></div></div>
+<div id="p2" class="h"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script>
+const LIFF_ID="ใส่ LIFF ID", API="ใส่ URL ของ Apps Script Web app (ลงท้าย /exec)";
+const CENTER=[13.75,100.5], ZOOM=6; // เปลี่ยนเป็นพิกัดร้านของคุณ
+const $=i=>document.getElementById(i), esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let uid="",pin=null,marker=null;
+const call=async b=>(await fetch(API,{method:"POST",body:JSON.stringify(b)})).json();
+const map=L.map("map").setView(CENTER,ZOOM);
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(map);
+function setPin(ll){pin=ll;if(marker)marker.setLatLng(ll);else{marker=L.marker(ll,{draggable:true}).addTo(map);marker.on("dragend",()=>pin=marker.getLatLng())}}
+map.on("click",e=>setPin(e.latlng));
+$("gps").onclick=()=>navigator.geolocation.getCurrentPosition(p=>{const ll=L.latLng(p.coords.latitude,p.coords.longitude);setPin(ll);map.setView(ll,17)},()=>$("msg").textContent="ขอตำแหน่งไม่สำเร็จ แตะแผนที่เพื่อปักหมุดแทนได้");
+function tab(n){$("p1").classList.toggle("h",n!=1);$("p2").classList.toggle("h",n!=2);$("t1").classList.toggle("on",n==1);$("t2").classList.toggle("on",n==2);if(n==1)map.invalidateSize();else load(true)}
+$("t1").onclick=()=>tab(1);$("t2").onclick=()=>tab(2);
+$("go").onclick=async()=>{
+ $("go").disabled=true;$("msg").textContent="กำลังส่ง...";
+ try{const r=await call({action:"create",userId:uid,name:$("nm").value,phone:$("ph").value,device:$("dv").value,address:$("ad").value,lat:pin?pin.lat:null,lng:pin?pin.lng:null});
+  $("msg").textContent=r.ok?"✅ รับเรื่องแล้ว รหัส "+r.code+" — ดูสถานะที่แท็บ 'ออเดอร์ของฉัน'":"❌ "+r.error;
+ }catch(e){$("msg").textContent="❌ ส่งไม่สำเร็จ ลองใหม่อีกครั้ง"}
+ $("go").disabled=false};
+let sig="",timers=[];
+const tiles=m=>L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(m);
+async function load(first){
+ try{const r=await call({action:"mine",userId:uid}),s=JSON.stringify(r.orders);
+  if(s===sig&&!first)return;sig=s;timers.forEach(clearInterval);timers=[];
+  if(!r.orders.length){$("p2").innerHTML='<div class="c">ยังไม่มีออเดอร์</div>';return}
+  $("p2").innerHTML=r.orders.map(o=>{const lv=o.step==1||o.step==5;return '<div class="c"><b>#'+esc(o.code)+'</b> '+esc(o.device)+'<ul class="tl">'+r.steps.map((t,i)=>
+   '<li class="'+(i<o.step?"d":i==o.step?"n":"")+'">'+t+(o.history[i]?'<small>'+new Date(o.history[i]).toLocaleString("th-TH",{dateStyle:"short",timeStyle:"short"})+'</small>':"")+'</li>').join("")+'</ul>'+
+   (lv?'<b>🛵 ตำแหน่งไรเดอร์</b><div class="lm" id="m_'+o.code+'"></div><small id="e_'+o.code+'"></small>':"")+'</div>'}).join("");
+  r.orders.filter(o=>o.step==1||o.step==5).forEach(o=>live(o.code));
+ }catch(e){$("p2").innerHTML='<div class="c">โหลดไม่สำเร็จ</div>'}}
+function live(code){
+ const m=L.map("m_"+code);tiles(m);let rm=null,cm=null,fit=false;const e=document.getElementById("e_"+code);
+ const tick=async()=>{try{const r=await call({action:"loc",userId:uid,code});if(!r.ok)return;
+  if(r.pin&&!cm)cm=L.marker([r.pin.lat,r.pin.lng]).addTo(m);
+  if(r.loc){const ll=[r.loc.lat,r.loc.lng];
+   if(rm)rm.setLatLng(ll);else rm=L.marker(ll,{icon:L.divIcon({html:"🛵",className:"",iconSize:[30,30]})}).addTo(m);
+   if(!fit){m.fitBounds(L.latLngBounds([ll].concat(r.pin?[[r.pin.lat,r.pin.lng]]:[])).pad(.3),{maxZoom:17});fit=true}
+   e.textContent=(r.rider||"ไรเดอร์")+" · อัปเดต "+new Date(r.loc.t).toLocaleTimeString("th-TH")
+  }else if(!fit){m.setView(r.pin?[r.pin.lat,r.pin.lng]:CENTER,15);fit=true;e.textContent="รอไรเดอร์เริ่มแชร์ตำแหน่ง..."}
+ }catch(x){}};
+ tick();timers.push(setInterval(tick,8000))}
+setInterval(()=>{if(!$("p2").classList.contains("h"))load()},15000);
+liff.init({liffId:LIFF_ID}).then(async()=>{
+ if(!liff.isLoggedIn()){liff.login();return}
+ const p=await liff.getProfile();uid=p.userId;$("nm").value=p.displayName||"";
+}).catch(e=>$("msg").textContent="เปิดผ่านแอป LINE เท่านั้น");
+</script></body></html>
