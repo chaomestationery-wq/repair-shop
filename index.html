@@ -635,7 +635,7 @@ function updateProgress() {
 
 /* ---------- แผนที่ฟอร์มแจ้งซ่อม ---------- */
 const map = L.map('map').setView(CENTER, ZOOM);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19, attribution: '© OpenStreetMap'
 }).addTo(map);
 
@@ -840,9 +840,9 @@ function render(r) {
   $('lvt').textContent = (isPickup ? 'ไรเดอร์กำลังไปรับเครื่องของคุณ' : 'ไรเดอร์กำลังนำเครื่องไปส่งคืน') + (r.rider ? ` (${r.rider})` : '');
   $('lvsub').textContent = isPickup ? 'เตรียมเครื่องและอุปกรณ์ให้พร้อมรอรับหน้าบ้านได้เลย' : 'เครื่องซ่อมเสร็จเรียบร้อย กำลังเดินทางไปส่งคุณ';
 
-  if (!smap) {
+if (!smap) {
     smap = L.map('m2').setView(CENTER, 13);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19, attribution: '© OpenStreetMap'
     }).addTo(smap);
   }
