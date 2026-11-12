@@ -13,13 +13,27 @@ body{margin:0;font-family:system-ui,'Noto Sans Thai',sans-serif;background:#f4f6
 .tabs button.on{background:#06c755;color:#fff;border-color:#06c755}
 h1{font-size:22px;margin:4px 0 2px}
 .sub{color:#64748b;margin:0 0 8px;font-size:15px}
-label{display:block;font-weight:600;margin:12px 0 4px}
+label{display:block;font-weight:600;margin:14px 0 4px}
+.hint{font-weight:400;color:#64748b;font-size:13px}
 input,textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid #ccd3dc;border-radius:10px;font:inherit;background:#fff}
-textarea{min-height:76px}
+textarea{min-height:70px}
 input:focus,textarea:focus{outline:0;border-color:#06c755;box-shadow:0 0 0 3px rgba(6,199,85,.15)}
 button{width:100%;padding:13px;margin-top:10px;border:0;border-radius:10px;background:#06c755;color:#fff;font:inherit;font-weight:700;cursor:pointer}
 button.s{background:#eef1f5;color:#1b2430}
 button:disabled{opacity:.6}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{width:auto;margin:0;padding:9px 14px;border-radius:99px;background:#fff;color:#1b2430;border:1.5px solid #ccd3dc;font-weight:600;font-size:15px}
+.chips button.on{background:#06c755;border-color:#06c755;color:#fff}
+.sym button.on{background:#ef4444;border-color:#ef4444}
+.rel{position:relative}
+#sg{position:absolute;left:0;right:0;top:100%;z-index:20;background:#fff;border:1px solid #e2e8f0;border-radius:12px;box-shadow:0 8px 24px rgba(15,27,45,.2);max-height:240px;overflow-y:auto;margin-top:4px}
+#sg div{padding:12px 14px;border-bottom:1px solid #eef1f5;cursor:pointer}
+#sg div:last-child{border-bottom:0}
+#sg div:hover,#sg div:active{background:#effaf3}
+.opt{display:flex;align-items:center;gap:12px;padding:12px;margin-top:8px;border:1.5px solid #ccd3dc;border-radius:12px;cursor:pointer;font-weight:600}
+.opt input{width:22px;height:22px;margin:0;flex:none;accent-color:#06c755}
+.opt.on{border-color:#06c755;background:#effaf3}
+.opt small{display:block;font-weight:400}
 #map{height:260px;border-radius:10px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 #msg,#smsg{margin:10px 0 0;font-weight:600}
@@ -51,14 +65,36 @@ small{color:#64748b}
 <div id="f" class="c">
   <h1>🔧 แจ้งซ่อมมือถือ</h1>
   <p class="sub">กรอกข้อมูล ร้านจะติดต่อกลับโดยเร็ว</p>
+
   <label>ชื่อ *</label><input id="nm" autocomplete="name" maxlength="80">
   <label>เบอร์โทร *</label><input id="ph" type="tel" inputmode="tel" autocomplete="tel" maxlength="20">
-  <label>รุ่นเครื่อง / อาการเสีย *</label><textarea id="dv" maxlength="200" placeholder="เช่น iPhone 13 จอแตก"></textarea>
-  <label>ที่อยู่สำหรับรับ-ส่ง *</label><textarea id="ad" maxlength="300"></textarea>
-  <label>ปักหมุดตำแหน่ง (ไม่บังคับ)</label>
-  <button type="button" class="s" id="gps" style="margin-top:0">📍 ใช้ตำแหน่งปัจจุบันของฉัน</button>
-  <div id="gm">หรือแตะแผนที่ / ลากหมุดเพื่อเลือกตำแหน่งเอง</div>
-  <div id="map" style="margin-top:8px"></div>
+
+  <label>ยี่ห้อมือถือ *</label>
+  <div class="chips" id="bc"></div>
+  <input id="bo" placeholder="พิมพ์ชื่อยี่ห้อ" maxlength="40" hidden style="margin-top:8px">
+
+  <label>รุ่น * <span class="hint">พิมพ์แล้วมีรุ่นแนะนำให้เลือก (พิมพ์เองก็ได้)</span></label>
+  <div class="rel"><input id="md" placeholder="เช่น A15, 13 Pro" maxlength="60" autocomplete="off"><div id="sg" hidden></div></div>
+
+  <label>อาการเสีย * <span class="hint">แตะเลือกได้หลายข้อ</span></label>
+  <div class="chips sym" id="sy"></div>
+  <textarea id="ex" maxlength="200" placeholder="รายละเอียดเพิ่มเติม (ไม่บังคับ)" style="margin-top:8px"></textarea>
+
+  <label>🔑 รหัสปลดล็อกเครื่อง <span class="hint">ไม่บังคับ — ไว้ให้ช่างเทสจอ/ทัชหลังซ่อม ร้านเห็นเฉพาะหลังร้าน (ถ้าเป็นลายเส้น พิมพ์เลขตำแหน่ง เช่น 1-2-5-8-9)</span></label>
+  <input id="pw" maxlength="30" autocomplete="off">
+
+  <label>บริการ <span class="hint">เลือกได้ทั้งสองอย่าง ไม่เลือกเลย = นำเครื่องมาที่ร้านเอง</span></label>
+  <label class="opt on" id="o1"><input type="checkbox" id="s1" checked><span>🛵 รับเครื่องถึงที่<small>ไรเดอร์มารับเครื่องที่บ้านคุณ</small></span></label>
+  <label class="opt on" id="o2"><input type="checkbox" id="s2" checked><span>📦 ส่งเครื่องกลับถึงที่<small>ซ่อมเสร็จแล้วไรเดอร์ไปส่งให้</small></span></label>
+
+  <div id="ab">
+    <label>ที่อยู่สำหรับรับ-ส่ง *</label><textarea id="ad" maxlength="300"></textarea>
+    <label>ปักหมุดตำแหน่ง <span class="hint">ไม่บังคับ</span></label>
+    <button type="button" class="s" id="gps" style="margin-top:0">📍 ใช้ตำแหน่งปัจจุบันของฉัน</button>
+    <div id="gm">หรือแตะแผนที่ / ลากหมุดเพื่อเลือกตำแหน่งเอง</div>
+    <div id="map" style="margin-top:8px"></div>
+  </div>
+
   <input class="hp" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
   <button type="button" id="go">ส่งข้อมูลแจ้งซ่อม</button>
   <p id="msg"></p>
@@ -119,18 +155,87 @@ const call=async b=>(await fetch(API,{method:'POST',body:JSON.stringify(b)})).js
 let pin=null,marker=null,circle=null,last='',lastPhone='';
 
 /* ---------- แท็บ ---------- */
-let ST=null; // timer ของหน้าสถานะ
+let ST=null;
 function tab(n){
   $('p1').hidden=n!=1;$('p2').hidden=n!=2;
   $('t1').classList.toggle('on',n==1);$('t2').classList.toggle('on',n==2);
-  if(n==1)map.invalidateSize();
-  else if(LAST)smap&&setTimeout(()=>smap.invalidateSize(),60);
-  if(n==1){clearTimeout(ST)}
-  else if(LAST&&!busy)sload();
+  if(n==1){map.invalidateSize();clearTimeout(ST)}
+  else{if(LAST&&smap)setTimeout(()=>smap.invalidateSize(),60);if(LAST&&!busy)sload()}
 }
 $('t1').onclick=()=>tab(1);$('t2').onclick=()=>tab(2);
 
-/* ---------- แจ้งซ่อม + GPS ---------- */
+/* ---------- ยี่ห้อ + รุ่นแนะนำ ---------- */
+const BR=[['Samsung','Samsung Galaxy'],['iPhone'],['iPad'],['OPPO'],['vivo'],['Xiaomi'],['Redmi'],['POCO'],['realme'],['Infinix'],['TECNO'],['Huawei'],['Honor'],['itel'],['Nokia'],['Motorola'],['OnePlus'],['Google Pixel'],['อื่นๆ','']];
+const MB={
+ 'Samsung Galaxy':'A03 A03s A04 A04s A05 A05s A06 A07 A13 A14 A15 A16 A17 A23 A24 A25 A26 A34 A35 A36 A54 A55 A56 M14 M15 M34 M35 S21 S22 S23 S23-FE S24 S24-FE S25 Z-Flip5 Z-Flip6 Z-Fold5 Z-Fold6 Note-10 Note-20',
+ 'iPhone':'SE 6s 7 7-Plus 8 8-Plus X XR XS XS-Max 11 11-Pro 11-Pro-Max 12-mini 12 12-Pro 12-Pro-Max 13-mini 13 13-Pro 13-Pro-Max 14 14-Plus 14-Pro 14-Pro-Max 15 15-Plus 15-Pro 15-Pro-Max 16e 16 16-Plus 16-Pro 16-Pro-Max 17 17-Pro 17-Pro-Max Air',
+ 'iPad':'9 10 Air-5 Pro-11',
+ 'OPPO':'A16 A17 A18 A38 A57 A58 A60 A78 A79 A98 A3 A5 Reno5 Reno6 Reno7 Reno8 Reno10 Reno11 Reno12 Reno13 Find-X5',
+ 'vivo':'Y02 Y03 Y12 Y15 Y17s Y18 Y20 Y21 Y22 Y27 Y28 Y35 Y36 Y100 V25 V27 V29 V30 V40 V50 T1 T2 T3',
+ 'Xiaomi':'11T 12 12T 13 13T 14 14T 15 Pad-6',
+ 'Redmi':'9A 9C 10 10C 12 12C 13 13C 14C A3 Note-10 Note-11 Note-12 Note-13 Note-14',
+ 'POCO':'X5 X6 X7 M5 M6 F5 F6 C65 C75',
+ 'realme':'C21Y C25 C30 C33 C35 C51 C53 C55 C61 C63 C65 C67 8 9 10 11 12 Note-50 Narzo-60',
+ 'Infinix':'Hot-10 Hot-11 Hot-12 Hot-20 Hot-30 Hot-40 Hot-50 Note-30 Note-40 Smart-7 Smart-8 Smart-9 Zero-30',
+ 'TECNO':'Spark-10 Spark-20 Spark-30 Camon-20 Camon-30 Pova-5 Pova-6',
+ 'Huawei':'nova-9 nova-10 nova-11 nova-12 P30 P40',
+ 'Honor':'X7 X8 X9 90 200 Magic-6',
+ 'itel':'A60 P55 S23',
+ 'Nokia':'G21 G42',
+ 'Motorola':'G54 G84 Edge-40',
+ 'OnePlus':'9 11 12 Nord-3',
+ 'Google Pixel':'6 7 8 9'
+};
+let brand=null; // {l,v}
+$('bc').innerHTML=BR.map((b,i)=>'<button type="button" data-i="'+i+'">'+esc(b[0])+'</button>').join('');
+$('bc').onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const i=+b.dataset.i,x=BR[i];
+  brand={l:x[0],v:x[1]===undefined?x[0]:x[1],i:i};
+  [...$('bc').children].forEach((c,k)=>c.classList.toggle('on',k===i));
+  const other=x[0]==='อื่นๆ';
+  $('bo').hidden=!other;
+  if(other)$('bo').focus();else $('md').focus();
+  sug();
+};
+function brandName(){
+  if(!brand)return '';
+  return brand.l==='อื่นๆ'?$('bo').value.trim():brand.v;
+}
+function sug(){
+  const box=$('sg');
+  const list=brand&&MB[brand.v]?MB[brand.v].split(' ').map(m=>m.replace(/-/g,' ')):[];
+  if(!list.length){box.hidden=true;return}
+  const q=$('md').value.trim().toLowerCase().replace(/\s+/g,'');
+  let r=list.filter(m=>!q||m.toLowerCase().replace(/\s+/g,'').includes(q)).slice(0,12);
+  if(r.length===1&&r[0].toLowerCase()===$('md').value.trim().toLowerCase())r=[];
+  if(!r.length){box.hidden=true;return}
+  box.innerHTML=r.map(m=>'<div data-m="'+esc(m)+'">'+esc(brand.l==='iPhone'||brand.l==='iPad'?brand.l+' '+m:m)+'</div>').join('');
+  box.hidden=false;
+}
+$('md').addEventListener('input',sug);
+$('md').addEventListener('focus',sug);
+$('md').addEventListener('blur',()=>setTimeout(()=>{$('sg').hidden=true},250));
+$('sg').addEventListener('click',e=>{
+  const d=e.target.closest('div[data-m]');if(!d)return;
+  $('md').value=d.dataset.m;$('sg').hidden=true;
+});
+
+/* ---------- อาการเสีย (แตะเลือกหลายข้อ) ---------- */
+const SY=['จอแตก','จอเป็นเส้น/จอดำ','ทัชไม่ติด','แบตเสื่อม','แบตบวม','ชาร์จไม่เข้า','เปิดไม่ติด','ค้าง/รีสตาร์ท','ลำโพง/ไมค์เสีย','กล้องเสีย','ปุ่มเสีย','สัญญาณ/ซิม','น้ำเข้า','ลืมรหัส/ลงโปรแกรม','อื่นๆ'];
+$('sy').innerHTML=SY.map(t=>'<button type="button">'+esc(t)+'</button>').join('');
+$('sy').onclick=e=>{const b=e.target.closest('button');if(b)b.classList.toggle('on')};
+
+/* ---------- บริการ: รับ / ส่ง ---------- */
+function svc(){
+  const a=$('s1').checked,b=$('s2').checked;
+  $('o1').classList.toggle('on',a);$('o2').classList.toggle('on',b);
+  $('ab').hidden=!(a||b);
+  if(a||b)setTimeout(()=>map.invalidateSize(),60);
+}
+$('s1').onchange=svc;$('s2').onchange=svc;
+
+/* ---------- แผนที่ + GPS ---------- */
 const map=L.map('map').setView(CENTER,ZOOM);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);
 function setPin(ll){
@@ -163,16 +268,30 @@ $('gps').onclick=()=>{
     {enableHighAccuracy:true,timeout:15000,maximumAge:0});
 };
 
+/* ---------- ส่งฟอร์ม ---------- */
 function show(t,ok){$('msg').style.color=ok?'#64748b':'#b91c1c';$('msg').textContent=t}
 $('go').onclick=async()=>{
-  const nm=$('nm').value.trim(),ph=$('ph').value.trim(),dv=$('dv').value.trim(),ad=$('ad').value.trim();
   if($('hp').value)return;
-  if(!nm||!ph||!dv||!ad)return show('กรุณากรอกข้อมูลที่มี * ให้ครบ');
+  const nm=$('nm').value.trim(),ph=$('ph').value.trim(),
+        bn=brandName(),md=$('md').value.trim(),
+        sy=[...$('sy').querySelectorAll('.on')].map(b=>b.textContent),ex=$('ex').value.trim(),
+        pick=$('s1').checked,del=$('s2').checked;
+  let ad=$('ad').value.trim();
+  if(!nm||!ph)return show('กรุณากรอกชื่อและเบอร์โทร');
   if(!/^[0-9+\-\s]{9,}$/.test(ph))return show('เบอร์โทรไม่ถูกต้อง');
+  if(!bn)return show('กรุณาเลือกยี่ห้อมือถือ');
+  if(!md)return show('กรุณากรอกรุ่น');
+  if(!sy.length&&!ex)return show('กรุณาเลือกอาการเสียอย่างน้อย 1 ข้อ');
+  if((pick||del)&&!ad)return show('กรุณากรอกที่อยู่สำหรับรับ-ส่ง');
+  if(!(pick||del))ad='(นำเครื่องมาที่ร้านเอง)';
+  const service=[pick&&'รับเครื่องถึงที่',del&&'ส่งเครื่องกลับถึงที่'].filter(Boolean).join(' + ')||'นำเครื่องมาที่ร้านเอง';
+  const problem=sy.join(', ')+(ex?(sy.length?' — ':'')+ex:'');
+  const usePin=(pick||del)&&pin;
   $('go').disabled=true;show('กำลังส่ง...',1);
   try{
-    const r=await call({action:'create',userId:'',name:nm,phone:ph,device:dv,address:ad,
-      lat:pin?pin.lat:null,lng:pin?pin.lng:null});
+    const r=await call({action:'create',userId:'',name:nm,phone:ph,
+      device:(bn+' '+md).trim(),problem:problem,pass:$('pw').value.trim(),service:service,
+      address:ad,lat:usePin?pin.lat:null,lng:usePin?pin.lng:null});
     if(r.ok){
       last=r.code;lastPhone=ph.replace(/\D/g,'').slice(-4);
       $('cd').textContent=r.code;
@@ -186,7 +305,11 @@ $('cp').onclick=async()=>{
   catch(e){$('cp').textContent='แตะค้างที่รหัสเพื่อคัดลอก'}
 };
 $('tr').onclick=()=>{$('sc').value=last;$('stl').value=lastPhone;tab(2);sload(true)};
-$('again').onclick=()=>{$('dv').value='';$('done').hidden=true;$('f').hidden=false;map.invalidateSize()};
+$('again').onclick=()=>{
+  ['md','ex','pw'].forEach(i=>$(i).value='');
+  [...$('sy').children].forEach(b=>b.classList.remove('on'));
+  $('done').hidden=true;$('f').hidden=false;map.invalidateSize();
+};
 
 /* ---------- เช็คสถานะ (ไทม์ไลน์ + แผนที่ไรเดอร์) ---------- */
 const fmt=ms=>new Date(+ms).toLocaleString('th-TH',{timeZone:'Asia/Bangkok',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+' น.';
@@ -270,7 +393,7 @@ $('sgo').onclick=()=>sload(true);
 $('stl').addEventListener('keydown',e=>{if(e.key==='Enter')sload(true)});
 $('chg').onclick=()=>{clearTimeout(ST);LAST=null;sview(false)};
 
-/* เปิดด้วยลิงก์ ?j=รหัสงาน → ไปหน้าเช็คสถานะเลย (จำเบอร์ 4 ตัวท้ายที่เคยกรอก) */
+/* เปิดด้วยลิงก์ ?j=รหัสงาน → ไปหน้าเช็คสถานะเลย */
 (function(){
   const j=(new URLSearchParams(location.search).get('j')||'').toUpperCase().replace(/[^A-Z0-9-]/g,'');
   let s={};try{s=JSON.parse(localStorage.trk||'{}')}catch(e){}
