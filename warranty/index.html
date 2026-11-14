@@ -70,8 +70,9 @@ button.g{background:transparent;color:#64748b;box-shadow:none;padding:10px}
 <div class="wrap">
   <div class="top"><div class="lg">🔧</div><h1 id="shop">ประกันของฉัน</h1><span class="live" id="lv" hidden><i></i><b id="lt">LIVE</b></span></div>
   <div id="ins" class="card ins" hidden><span>📲 ติดตั้งไว้บนหน้าจอ เปิดดูประกันได้ทันที</span><button onclick="inst()">ติดตั้ง</button></div>
+  <div class="card" style="padding:12px"><button onclick="scan()">📷 สแกน QR เพิ่มใบประกัน</button></div>
   <div id="v"></div>
-  <div class="mu" id="up">สแกน QR บนใบรับประกันใบใหม่ เพื่อเพิ่มรายการในแอปนี้<br>ข้อมูลเก็บไว้ในเครื่องของคุณเท่านั้น</div>
+  <div class="mu" id="up">กดปุ่ม 📷 ด้านบน แล้วสแกน QR บนใบรับประกันเพื่อเพิ่มรายการในแอปนี้<br>ข้อมูลเก็บไว้ในเครื่องของคุณเท่านั้น</div>
 </div>
 <div id="ov" hidden onclick="if(event.target==this)cl()"><div class="sh" id="sh"></div></div>
 <div id="tt"></div>
@@ -93,17 +94,28 @@ const DEF_LINE='@457mwrdi';
 W.forEach(w=>{if(!w.ct)w.ct=DEF_LINE});
 
 /* รับข้อมูลจาก QR (ลิงก์ ?w=รหัส&n=...&i=...) แล้วเก็บไว้ในเครื่อง */
-(function(){
-  const P=new URLSearchParams(location.search),c=(P.get('w')||'').trim();
-  if(!c)return;
+function addFromParams(P){
+  const c=(P.get('w')||'').trim();
+  if(!c)return false;
   const o={c:c,n:P.get('n')||'',i:P.get('i')||'',d:P.get('d')||'',s:P.get('s')||'',e:P.get('e')||'',y:P.get('y')||'',
            sn:P.get('sn')||'',tl:P.get('tl')||'',ct:P.get('ct')||DEF_LINE};
   const k=W.findIndex(x=>x.c==c);
   if(k>=0)W[k]=Object.assign(W[k],o);else W.unshift(o);
   save(W);
+  return true;
+}
+(function(){
+  if(!addFromParams(new URLSearchParams(location.search)))return;
   try{history.replaceState(null,'',location.pathname)}catch(e){}
   setTimeout(()=>toast('เพิ่มใบประกันนี้ในแอปแล้ว'),300);
 })();
+/* แปลงข้อความจาก QR / ลิงก์ที่วาง ให้เป็นพารามิเตอร์ แล้วเพิ่มใบประกัน */
+function addFromText(t){
+  t=String(t||'').trim();
+  let q='';
+  try{q=new URL(t).search}catch(e){const j=t.indexOf('?');q=j>=0?t.slice(j):(t.indexOf('w=')>=0?t:'')}
+  return addFromParams(new URLSearchParams(q));
+}
 
 /* สถานะของใบประกัน: void ยกเลิก / none ไม่พบในระบบ / exp หมดแล้ว / warn ใกล้หมด (≤7 วัน) / ok */
 function stOf(w){
@@ -125,7 +137,7 @@ function render(){
 <div style="margin-top:14px"><button onclick="claim(${i})">🛠️ เคลมประกัน</button></div>
 <div class="rm"><a onclick="cp(${i})">คัดลอกรหัส</a> · <a onclick="del(${i})">ลบ</a></div>
 ${w.t?`<div class="mu" style="margin-top:4px">✓ ตรวจกับระบบร้านล่าสุด ${(d=>TDs(d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())))(new Date(w.t))} ${new Date(w.t).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}</div>`:''}
-</div>`}).join(''):'<div class="card hero" style="--c:#64748b"><div class="em">🛡️</div><h2>ยังไม่มีใบประกันในแอป</h2><p>สแกน QR บนใบรับประกันที่ได้จากร้าน</p></div>';
+</div>`}).join(''):'<div class="card hero" style="--c:#64748b"><div class="em">🛡️</div><h2>ยังไม่มีใบประกันในแอป</h2><p>กดปุ่ม 📷 สแกน QR ด้านบน แล้วสแกน QR บนใบรับประกันจากร้าน</p></div>';
   tick();
 }
 
@@ -163,8 +175,8 @@ async function copy(t){
 }
 
 /* ----- เคลม ----- */
-const cl=()=>{$('#ov').hidden=true};
-const open_=h=>{$('#sh').innerHTML=h;$('#ov').hidden=false};
+const cl=()=>{stopScan();$('#ov').hidden=true};
+const open_=h=>{stopScan();$('#sh').innerHTML=h;$('#ov').hidden=false};
 /* ไอดี LINE Official Account ของร้าน: รับได้ทั้ง @ไอดี และลิงก์ line.me/R/ti/p/@ไอดี */
 function lineId(ct){
   ct=String(ct||'').trim();
@@ -205,6 +217,57 @@ async function sendLink(){const w=cur();await copy(msg(w,pb()));toast('คัด
 function callShop(){location.href='tel:'+cur().tl.replace(/[^\d+]/g,'')}
 function sendSms(){const w=cur();location.href='sms:'+w.tl.replace(/[^\d+]/g,'')+'?body='+encodeURIComponent(msg(w,pb()))}
 async function copyMsg(){await copy(msg(cur(),pb()));toast('คัดลอกข้อความแล้ว')}
+
+/* ----- สแกน QR ในแอป ----- */
+let SCS=null,SCT=0;
+function stopScan(){SCT=0;if(SCS){SCS.getTracks().forEach(t=>t.stop());SCS=null}}
+function loadJsQR(){
+  return new Promise(r=>{
+    if(window.jsQR)return r();
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
+    s.onload=()=>r();s.onerror=()=>r();document.head.appendChild(s);
+  });
+}
+function scanNote(t){const n=$('#scn');if(n){n.textContent=t;n.hidden=false}}
+function pasteLink(){
+  stopScan();
+  const t=prompt('วางลิงก์ใบประกันที่ได้จากร้าน');
+  if(t==null)return;
+  if(addFromText(t)){cl();render();toast('เพิ่มใบประกันนี้ในแอปแล้ว')}
+  else toast('ลิงก์นี้ไม่ใช่ใบประกัน');
+}
+async function scan(){
+  open_(`<h3>📷 สแกน QR ใบประกัน</h3><div class="sub">เล็งกล้องไปที่ QR บนใบรับประกัน</div>
+<video id="sv" playsinline muted style="width:100%;border-radius:14px;margin-top:12px;background:#000;aspect-ratio:1/1;object-fit:cover"></video>
+<div class="nt" id="scn" hidden></div>
+<button class="s" onclick="pasteLink()">🔗 วางลิงก์แทน</button>
+<button class="g" onclick="cl()">ปิด</button>`);
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){scanNote('เครื่องนี้เปิดกล้องในหน้าเว็บไม่ได้ ใช้ปุ่ม "วางลิงก์แทน" หรือสแกนด้วยกล้องมือถือ');return}
+  try{SCS=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false})}
+  catch(e){scanNote('เปิดกล้องไม่ได้ กรุณากดอนุญาตการใช้กล้อง แล้วลองใหม่ หรือใช้ปุ่ม "วางลิงก์แทน"');return}
+  const v=$('#sv');if(!v){stopScan();return}
+  v.srcObject=SCS;try{await v.play()}catch(e){}
+  let det=null;
+  if('BarcodeDetector' in window){try{det=new BarcodeDetector({formats:['qr_code']})}catch(e){}}
+  if(!det)await loadJsQR();
+  if(!det&&!window.jsQR){scanNote('สแกนในแอปไม่ได้ในเครื่องนี้ ใช้ปุ่ม "วางลิงก์แทน" หรือสแกนด้วยกล้องมือถือ');return}
+  const cv=document.createElement('canvas'),cx=cv.getContext('2d',{willReadFrequently:true}),id=++SCT;
+  const loop=async()=>{
+    if(SCT!==id||!SCS)return;
+    let txt='';
+    try{
+      if(det){const r=await det.detect(v);if(r.length)txt=r[0].rawValue}
+      else if(v.videoWidth){cv.width=v.videoWidth;cv.height=v.videoHeight;cx.drawImage(v,0,0);const im=cx.getImageData(0,0,cv.width,cv.height),r=jsQR(im.data,im.width,im.height);if(r)txt=r.data}
+    }catch(e){}
+    if(txt){
+      if(addFromText(txt)){cl();render();toast('เพิ่มใบประกันนี้ในแอปแล้ว');return}
+      scanNote('QR นี้ไม่ใช่ใบประกันของร้าน ลองสแกน QR บนใบรับประกัน');
+    }
+    setTimeout(loop,det?200:300);
+  };
+  loop();
+}
 
 /* ----- ติดตั้งเป็นแอป ----- */
 let DP=null;
