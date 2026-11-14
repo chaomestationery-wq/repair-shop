@@ -50,6 +50,12 @@ button.g{background:transparent;color:#64748b;box-shadow:none;padding:10px}
 .rm{text-align:center;font-size:14px;color:#94a3b8;margin-top:8px}
 .rm a{color:#0f766e;font-weight:600;cursor:pointer;padding:8px}
 .mu{font-size:13px;color:#94a3b8;text-align:center;margin-top:10px}
+.sm{display:flex;align-items:center;gap:10px;cursor:pointer;padding:2px 0}
+.smi{font-size:20px}
+.smx{flex:1;min-width:0}.smx b{display:block;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.smx small{color:#64748b;font-size:13px}
+.smd{font-weight:700;color:var(--c);font-size:15px;white-space:nowrap}
+.chev{color:#94a3b8;transition:.2s}.open .chev{transform:rotate(180deg)}
+.det{margin-top:12px}
 .ins{display:flex;gap:10px;align-items:center}
 .ins span{flex:1;font-size:15px}.ins button{width:auto;padding:11px 18px}
 #ov{position:fixed;inset:0;z-index:20;background:#0f1b2d99;display:flex;align-items:flex-end;justify-content:center}
@@ -89,6 +95,7 @@ const TDs=s=>{if(!OK10(s))return'-';const[y,m,d]=String(s).slice(0,10).split('-'
 const p2=n=>('0'+n).slice(-2);
 const toast=m=>{const t=$('#tt');t.textContent=m;t.className='on';clearTimeout(t._h);t._h=setTimeout(()=>t.className='',2600)};
 let W=load(),CUR=null;
+const OPEN=new Set(); /* รหัสใบประกันที่ขยายอยู่ (ใบล่าสุดจะเปิดไว้ ใบอื่นย่อ) */
 /* LINE Official Account ของร้าน (ค่าเริ่มต้น ใช้เมื่อ QR ไม่ได้ส่ง ct มา) */
 const DEF_LINE='@457mwrdi';
 W.forEach(w=>{if(!w.ct)w.ct=DEF_LINE});
@@ -100,7 +107,8 @@ function addFromParams(P){
   const o={c:c,n:P.get('n')||'',i:P.get('i')||'',d:P.get('d')||'',s:P.get('s')||'',e:P.get('e')||'',y:P.get('y')||'',
            sn:P.get('sn')||'',tl:P.get('tl')||'',ct:P.get('ct')||DEF_LINE};
   const k=W.findIndex(x=>x.c==c);
-  if(k>=0)W[k]=Object.assign(W[k],o);else W.unshift(o);
+  if(k>=0){W[k]=Object.assign(W[k],o);W.unshift(W.splice(k,1)[0])}else W.unshift(o);
+  OPEN.clear();OPEN.add(c); /* ใบที่เพิ่งสแกนเป็นใบหลัก เปิดไว้ ใบอื่นย่อ */
   save(W);
   return true;
 }
@@ -125,11 +133,14 @@ function stOf(w){
 }
 
 function render(){
-  const l=W.slice().sort((a,b)=>String(b.e).localeCompare(String(a.e)));
+  const l=W.slice(); /* ใบที่เพิ่มล่าสุดอยู่บนสุด */
+  if(W.length&&!W.some(x=>OPEN.has(x.c)))OPEN.add(W[0].c);
   const sn=(W.find(x=>x.sn)||{}).sn;
   $('#shop').textContent=sn||'ประกันของฉัน';document.title=(sn?sn+' • ':'')+'ประกันของฉัน';
   const kv=(a,b)=>b?`<div class="kv"><span>${a}</span><b>${esc(b)}</b></div>`:'';
-  $('#v').innerHTML=l.length?l.map(w=>{const i=W.indexOf(w);return `<div class="card wc" data-i="${i}">
+  $('#v').innerHTML=l.length?l.map(w=>{const i=W.indexOf(w),op=W.length<2||OPEN.has(w.c);return `<div class="card wc${op?' open':''}" data-i="${i}">
+<div class="sm" ${W.length>1?'':'hidden'} onclick="tg(${i})"><span class="smi"></span><div class="smx"><b>${esc(w.d||w.i||w.c)}</b><small>${esc(w.c)}${w.i&&w.d?' • '+esc(w.i):''}</small></div><span class="smd"></span><span class="chev">▾</span></div>
+<div class="det" ${op?'':'hidden'}>
 <div style="text-align:center"><div class="pill pl"></div>
 <div class="ring"><svg width="230" height="230" viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="#e2e8f0" stroke-width="9"/><circle class="rg" cx="60" cy="60" r="54" fill="none" stroke="var(--c)" stroke-width="9" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear"/></svg><div class="in"><div class="dd">-</div><div class="dl">วันคงเหลือ</div><div class="tm"></div></div></div>
 <div class="bar"><div class="br"></div></div><div class="pc"></div></div>
@@ -137,7 +148,7 @@ function render(){
 <div style="margin-top:14px"><button onclick="claim(${i})">🛠️ เคลมประกัน</button></div>
 <div class="rm"><a onclick="cp(${i})">คัดลอกรหัส</a> · <a onclick="del(${i})">ลบ</a></div>
 ${w.t?`<div class="mu" style="margin-top:4px">✓ ตรวจกับระบบร้านล่าสุด ${(d=>TDs(d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())))(new Date(w.t))} ${new Date(w.t).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}</div>`:''}
-</div>`}).join(''):'<div class="card hero" style="--c:#64748b"><div class="em">🛡️</div><h2>ยังไม่มีใบประกันในแอป</h2><p>กดปุ่ม 📷 สแกน QR ด้านบน แล้วสแกน QR บนใบรับประกันจากร้าน</p></div>';
+</div></div>`}).join(''):'<div class="card hero" style="--c:#64748b"><div class="em">🛡️</div><h2>ยังไม่มีใบประกันในแอป</h2><p>กดปุ่ม 📷 สแกน QR ด้านบน แล้วสแกน QR บนใบรับประกันจากร้าน</p></div>';
   tick();
 }
 
@@ -154,6 +165,8 @@ function tick(){
     else if(st=='warn'){col='#f59e0b';t='ใกล้หมดประกัน'}
     c.style.setProperty('--c',col);
     c.querySelector('.pl').textContent=ic+t;
+    c.querySelector('.smi').textContent=ic;
+    c.querySelector('.smd').textContent=(st=='ok'||st=='warn')?Math.floor(ms/864e5)+' วัน':st=='exp'?'หมดแล้ว':st=='void'?'ยกเลิก':'—';
     c.querySelector('.rg').setAttribute('stroke-dashoffset',339.3*(1-frac));
     c.querySelector('.br').style.width=(frac*100)+'%';
     const dd=c.querySelector('.dd'),tm=c.querySelector('.tm'),pc=c.querySelector('.pc');
@@ -167,6 +180,7 @@ function tick(){
 }
 setInterval(tick,1000);
 
+function tg(i){const c=W[i].c;if(OPEN.has(c))OPEN.delete(c);else OPEN.add(c);render()}
 function cp(i){copy(W[i].c).then(()=>toast('คัดลอกรหัสแล้ว'))}
 function del(i){if(confirm('ลบใบประกันนี้ออกจากแอป?\n(สแกน QR ใหม่เพื่อเพิ่มกลับได้)')){W.splice(i,1);save(W);render()}}
 async function copy(t){
