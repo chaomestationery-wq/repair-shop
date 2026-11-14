@@ -82,20 +82,20 @@ button.g{background:transparent;color:#64748b;box-shadow:none;padding:10px}
 .ins span{flex:1;font-size:14px;color:#0f766e;font-weight:700;line-height:1.4}
 .ins button{width:auto;padding:10px 16px;font-size:14px;flex-shrink:0}
 
-/* Modal & Tour */
+/* Modal & Tour Styling */
 #ov{position:fixed;inset:0;z-index:20;background:#0f1b2d99;backdrop-filter:blur(5px);display:flex;align-items:flex-end;justify-content:center}
-.sh{background:#fff;width:100%;max-width:480px;max-height:92vh;overflow:auto;border-radius:26px 26px 0 0;padding:24px 20px calc(env(safe-area-inset-bottom) + 22px);box-shadow:0 -10px 40px #0003}
+.sh{background:#fff;width:100%;max-width:480px;max-height:95vh;overflow:auto;border-radius:26px 26px 0 0;padding:24px 20px calc(env(safe-area-inset-bottom) + 22px);box-shadow:0 -10px 40px #0003}
 .sh h3{font-size:21px;margin-bottom:4px}
 .sh .sub{color:#64748b;font-size:15px;margin-bottom:14px}
 .sh textarea{width:100%;min-height:96px;margin:8px 0 4px;padding:12px 14px;border:2px solid #99f6e4;border-radius:14px;font:inherit;resize:vertical;color:#1e293b}
 .nt{padding:12px 14px;border-radius:14px;background:#fef3c7;color:#b45309;font-size:14px;margin-top:10px;line-height:1.5;font-weight:500}
 
-/* Tour & Guide Images Styling */
-.tour-card{text-align:center;padding:4px}
-.tour-img-box{width:100%;height:180px;border-radius:18px;overflow:hidden;margin:10px 0 16px;background:linear-gradient(135deg,#f0fdfa,#99f6e433);display:flex;align-items:center;justify-content:center;border:1px solid #ccfbf1;box-shadow:0 6px 16px #0f766e11}
-.tour-img-box img{width:100%;height:100%;object-fit:cover}
+/* Tour Visual SVG Infographic Box */
+.tour-card{text-align:center;padding:2px}
+.tour-svg-box{width:100%;border-radius:16px;overflow:hidden;margin:10px 0 14px;background:#f8fafc;border:1px solid #e2e8f0;box-shadow:0 4px 12px #0f766e0d}
+.tour-svg-box svg{width:100%;height:auto;display:block}
 .tour-title{font-size:20px;font-weight:800;color:#0f766e;margin:0 0 6px}
-.tour-desc{font-size:15px;color:#475569;line-height:1.6;margin:0 0 16px;min-height:64px}
+.tour-desc{font-size:15px;color:#475569;line-height:1.6;margin:0 0 16px;min-height:50px}
 .dots{display:flex;justify-content:center;gap:8px;margin-bottom:16px}
 .dot{width:8px;height:8px;border-radius:10px;background:#cbd5e1;transition:all .3s}
 .dot.on{width:24px;background:#0f766e}
@@ -283,25 +283,56 @@ async function copy(t){
   catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(x){}a.remove()}
 }
 
-/* ----- ป็อปอัปสอนการใช้งานพร้อมรูปภาพประกอบ (Visual Tour) ----- */
+/* ----- ป็อปอัปสอนการใช้งานพร้อมรูปภาพ SVG Infographic อธิบายขั้นตอนจริง ----- */
 const STEPS=[
   {
-    img:'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format&fit=crop&q=80',
+    svg:`<svg viewBox="0 0 400 240" font-family="'Noto Sans Thai',sans-serif">
+      <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#99f6e4"/><stop offset="1" stop-color="#f0fdfa"/></linearGradient></defs>
+      <rect width="400" height="240" fill="url(#g1)"/>
+      <circle cx="200" cy="120" r="70" fill="#fff" opacity="0.6"/>
+      <rect x="130" y="70" width="140" height="100" rx="14" fill="#0f766e"/>
+      <text x="200" y="115" text-anchor="middle" font-size="28" fill="#fff">🛡️</text>
+      <text x="200" y="145" text-anchor="middle" font-size="14" font-weight="700" fill="#ccfbf1">ประกันของฉัน</text>
+    </svg>`,
     t:'ยินดีต้อนรับสู่ "ประกันของฉัน"',
-    d:'แอปเก็บใบรับประกันดิจิทัลบนมือถือ หมดปัญหาใบเสร็จหาย หมึกจาง เช็กวันหมดอายุได้ทันที'
+    d:'แอปเก็บใบรับประกันดิจิทัลบนมือถือ ไม่ต้องกลัวใบเสร็จกระดาษหาย เช็กวันหมดอายุได้ทันที'
   },
   {
-    img:'https://images.unsplash.com/photo-1595078475328-1ab05d0a6a0e?w=600&auto=format&fit=crop&q=80',
-    t:'1. สแกน QR Code เพื่อเพิ่มใบประกัน',
-    d:'กดปุ่ม <b>"สแกน QR"</b> แล้วส่องกล้องไปที่ QR บนใบรับประกันจากทางร้าน ข้อมูลจะบันทึกเข้าเครื่องทันที'
+    svg:`<svg viewBox="0 0 400 240" font-family="'Noto Sans Thai',sans-serif">
+      <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2e8f0"/><stop offset="1" stop-color="#f8fafc"/></linearGradient></defs>
+      <rect width="400" height="240" fill="url(#g2)"/>
+      <rect x="70" y="35" width="110" height="170" rx="8" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+      <rect x="95" y="60" width="60" height="60" fill="#0f172a"/><g fill="#fff"><rect x="100" y="65" width="12" height="12"/><rect x="138" y="65" width="12" height="12"/><rect x="100" y="103" width="12" height="12"/></g>
+      <path d="M195 120 C 220 100, 240 100, 265 120" fill="none" stroke="#0f766e" stroke-width="4" stroke-dasharray="6 4"/>
+      <rect x="275" y="30" width="80" height="180" rx="20" fill="#0f172a"/>
+      <rect x="281" y="40" width="68" height="160" rx="14" fill="#f0fdfa"/>
+      <rect x="290" y="60" width="50" height="50" rx="8" fill="#0f766e"/><text x="315" y="92" text-anchor="middle" font-size="22" fill="#fff">📷</text>
+    </svg>`,
+    t:'1. สแกน QR Code เพิ่มใบประกัน',
+    d:'กดปุ่ม <b>"📷 สแกน QR"</b> แล้วส่องกล้องไปที่ QR Code บนใบรับประกันจากร้านค้า เพื่อบันทึกเข้าเครื่อง'
   },
   {
-    img:'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600&auto=format&fit=crop&q=80',
+    svg:`<svg viewBox="0 0 400 240" font-family="'Noto Sans Thai',sans-serif">
+      <defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0fdfa"/><stop offset="1" stop-color="#ccfbf1"/></linearGradient></defs>
+      <rect width="400" height="240" fill="url(#g3)"/>
+      <circle cx="200" cy="120" r="70" fill="none" stroke="#cbd5e1" stroke-width="12"/>
+      <circle cx="200" cy="120" r="70" fill="none" stroke="#16a34a" stroke-width="12" stroke-linecap="round" stroke-dasharray="310 440" transform="rotate(-90 200 120)"/>
+      <text x="200" y="115" text-anchor="middle" font-size="38" font-weight="800" fill="#16a34a">30</text>
+      <text x="200" y="145" text-anchor="middle" font-size="14" font-weight="700" fill="#475569">วันคงเหลือ</text>
+    </svg>`,
     t:'2. เช็กวันคุ้มครองแบบเรียลไทม์',
-    d:'วงแหวนสีเขียวบอกเวลาคงเหลือ ถ้าใกล้หมดอายุจะเตือนเป็นสีส้ม และแดงเมื่อหมดประกัน'
+    d:'วงแหวนบอกเวลาคงเหลือ สีเขียวคือปกติ สีส้มคือใกล้หมดประกัน (≤7 วัน) และสีแดงคือหมดอายุแล้ว'
   },
   {
-    img:'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&auto=format&fit=crop&q=80',
+    svg:`<svg viewBox="0 0 400 240" font-family="'Noto Sans Thai',sans-serif">
+      <defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#e2e8f0"/></linearGradient></defs>
+      <rect width="400" height="240" fill="url(#g4)"/>
+      <rect x="80" y="60" width="240" height="120" rx="18" fill="#fff" stroke="#99f6e4" stroke-width="3"/>
+      <rect x="105" y="85" width="190" height="36" rx="8" fill="#f1f5f9"/>
+      <text x="120" y="109" font-size="13" fill="#64748b">พิมพ์อาการเสียคร่าวๆ...</text>
+      <rect x="105" y="130" width="190" height="36" rx="10" fill="#06c755"/>
+      <text x="200" y="153" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">💬 ส่งเรื่องเคลมทาง LINE</text>
+    </svg>`,
     t:'3. แจ้งเคลมง่าย ส่งตรงถึงร้านผ่าน LINE',
     d:'เมื่อสินค้ามีปัญหา กดปุ่ม <b>"แจ้งเคลมประกัน"</b> พิมพ์อาการเสีย ระบบจะส่งข้อมูลเข้าร้านค้าให้ทันที'
   }
@@ -313,7 +344,7 @@ function openTour(step=0){
   const dots=STEPS.map((_,idx)=>`<span class="dot${idx===step?' on':''}"></span>`).join('');
   open_(`
   <div class="tour-card">
-    <div class="tour-img-box"><img src="${s.img}" alt="คู่มือการใช้งาน"></div>
+    <div class="tour-svg-box">${s.svg}</div>
     <div class="tour-title">${s.t}</div>
     <div class="tour-desc">${s.d}</div>
     <div class="dots">${dots}</div>
@@ -474,7 +505,7 @@ if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWor
 render();syncAll();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){render();syncAll()}});
 
-/* เปิดป็อปอัปพร้อมรูปภาพอัตโนมัติเมื่อเข้าเว็บครั้งแรก */
+/* เปิดป็อปอัปอัตโนมัติเมื่อเข้าเว็บครั้งแรก */
 if(!localStorage.getItem(K_TOUR)){
   setTimeout(()=>openTour(0), 600);
 }
