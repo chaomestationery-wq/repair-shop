@@ -30,25 +30,24 @@ body{margin:0;font:17px system-ui,-apple-system,sans-serif;color:#1e293b;min-hei
 .live.off i{background:#dc2626;animation:none}
 @keyframes pl{0%{box-shadow:0 0 0 0 #16a34a88}100%{box-shadow:0 0 0 9px #16a34a00}}
 
-/* Cards & Stagger Animation */
+/* Cards */
 .card{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 8px 24px #0f766e12;border:1px solid #e6f4f1;animation:up .4s cubic-bezier(0.16,1,0.3,1) both}
 .card:nth-child(2){animation-delay:.06s}
 .card:nth-child(3){animation-delay:.12s}
 @keyframes up{from{opacity:0;transform:translateY(16px) scale(.98)}}
 
-/* Empty State Hero */
+/* Hero */
 .hero{text-align:center;border-top:6px solid var(--c);position:relative;overflow:hidden;padding:28px 18px}
 .hero .em{font-size:68px;line-height:1.1;animation:bob 2.6s ease-in-out infinite;margin-bottom:8px;display:inline-block}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(3deg)}}
 .hero h2{margin:6px 0 6px;font-size:23px;color:var(--c);font-weight:800}
 .hero p{margin:0;color:#64748b;font-size:15px;line-height:1.6}
 
-/* Key-Value List */
 .kv{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px dashed #e2e8f0;font-size:15px}
 .kv:last-child{border:0}.kv span{color:#64748b}.kv b{text-align:right;color:#0f172a}
 h3{margin:0 0 6px;font-size:18px;color:#0f766e;font-weight:800}
 
-/* Buttons with Ripple/Shimmer */
+/* Buttons */
 button{font:inherit;font-weight:700;width:100%;padding:15px;border:0;border-radius:15px;color:#fff;background:linear-gradient(120deg,#0f766e,#14b8a6);box-shadow:0 6px 18px #0f766e3b;cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden}
 button:active{transform:scale(.97);box-shadow:0 2px 8px #0f766e33}
 button.scan-main::after{content:"";position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,#ffffff33,transparent);animation:btnSweep 3.5s infinite}
@@ -56,11 +55,11 @@ button.scan-main::after{content:"";position:absolute;top:0;left:-100%;width:60%;
 button.s{background:#fff;color:#0f766e;border:2px solid #99f6e4;box-shadow:none}
 button.g{background:transparent;color:#64748b;box-shadow:none;padding:10px}
 
-/* Countdown Ring & Pulse */
+/* Ring & UI */
 .ring{position:relative;width:224px;height:224px;margin:10px auto}
 .ring svg{transform:rotate(-90deg);filter:drop-shadow(0 4px 10px var(--c)22)}
 .ring .in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring .dd{font-size:54px;font-weight:800;line-height:1;color:var(--c);letter-spacing:-1.5px;transition:transform .2s}
+.ring .dd{font-size:54px;font-weight:800;line-height:1;color:var(--c);letter-spacing:-1.5px}
 .ring .dl{color:#64748b;font-size:14px;font-weight:600;margin-top:2px}
 .ring .tm{font-size:21px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums;color:#334155;background:#f8fafc;padding:3px 12px;border-radius:10px;border:1px solid #e2e8f0}
 
@@ -72,46 +71,37 @@ button.g{background:transparent;color:#64748b;box-shadow:none;padding:10px}
 .rm a{color:#0f766e;font-weight:600;cursor:pointer;padding:8px}
 .mu{font-size:13px;color:#94a3b8;text-align:center;margin-top:10px;line-height:1.5}
 
-/* Accordion Summary */
 .sm{display:flex;align-items:center;gap:12px;cursor:pointer;padding:2px 0}
 .smi{font-size:22px}
 .smx{flex:1;min-width:0}.smx b{display:block;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1e293b}.smx small{color:#64748b;font-size:13px}
 .smd{font-weight:700;color:var(--c);font-size:14px;white-space:nowrap;background:#f0fdfa;padding:4px 10px;border-radius:10px}
 .chev{color:#94a3b8;transition:transform .25s;font-size:13px}.open .chev{transform:rotate(180deg)}
-.det{margin-top:14px;border-top:1px solid #f1f5f9;padding-top:14px;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}}
+.det{margin-top:14px;border-top:1px solid #f1f5f9;padding-top:14px}
 
-/* Install Banner */
 .ins{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg,#f0fdfa,#ccfbf1);border:1.5px solid #5eead4}
 .ins span{flex:1;font-size:14px;color:#0f766e;font-weight:700;line-height:1.4}
 .ins button{width:auto;padding:10px 16px;font-size:14px;flex-shrink:0}
 
-/* Modal & Onboarding Tour Popup */
-#ov{position:fixed;inset:0;z-index:20;background:#0f1b2d99;backdrop-filter:blur(5px);display:flex;align-items:flex-end;justify-content:center;animation:bgFade .2s}
-@keyframes bgFade{from{opacity:0}}
-.sh{background:#fff;width:100%;max-width:480px;max-height:92vh;overflow:auto;border-radius:26px 26px 0 0;padding:24px 20px calc(env(safe-area-inset-bottom) + 22px);animation:sl .28s cubic-bezier(0.16,1,0.3,1);box-shadow:0 -10px 40px #0003}
-@keyframes sl{from{transform:translateY(80px);opacity:0}}
+/* Modal & Tour */
+#ov{position:fixed;inset:0;z-index:20;background:#0f1b2d99;backdrop-filter:blur(5px);display:flex;align-items:flex-end;justify-content:center}
+.sh{background:#fff;width:100%;max-width:480px;max-height:92vh;overflow:auto;border-radius:26px 26px 0 0;padding:24px 20px calc(env(safe-area-inset-bottom) + 22px);box-shadow:0 -10px 40px #0003}
 .sh h3{font-size:21px;margin-bottom:4px}
 .sh .sub{color:#64748b;font-size:15px;margin-bottom:14px}
 .sh textarea{width:100%;min-height:96px;margin:8px 0 4px;padding:12px 14px;border:2px solid #99f6e4;border-radius:14px;font:inherit;resize:vertical;color:#1e293b}
-.sh textarea:focus{outline:3px solid #14b8a633;border-color:#14b8a6}
-.sh button{margin-top:10px}
-.sh ol,.sh ul{padding-left:20px;line-height:1.8;margin:8px 0;color:#334155;font-size:15px}
 .nt{padding:12px 14px;border-radius:14px;background:#fef3c7;color:#b45309;font-size:14px;margin-top:10px;line-height:1.5;font-weight:500}
 
-/* Interactive Tour Styles */
-.tour-card{text-align:center;padding:8px 4px}
-.tour-icon{font-size:64px;margin:8px auto 12px;width:104px;height:104px;background:linear-gradient(135deg,#f0fdfa,#ccfbf1);border-radius:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px #0f766e1a;animation:popIn .35s cubic-bezier(0.34,1.56,0.64,1)}
-@keyframes popIn{from{transform:scale(0.6);opacity:0}}
-.tour-title{font-size:21px;font-weight:800;color:#0f766e;margin:0 0 8px}
-.tour-desc{font-size:15px;color:#475569;line-height:1.6;margin:0 0 18px;min-height:72px}
+/* Tour & Guide Images Styling */
+.tour-card{text-align:center;padding:4px}
+.tour-img-box{width:100%;height:180px;border-radius:18px;overflow:hidden;margin:10px 0 16px;background:linear-gradient(135deg,#f0fdfa,#99f6e433);display:flex;align-items:center;justify-content:center;border:1px solid #ccfbf1;box-shadow:0 6px 16px #0f766e11}
+.tour-img-box img{width:100%;height:100%;object-fit:cover}
+.tour-title{font-size:20px;font-weight:800;color:#0f766e;margin:0 0 6px}
+.tour-desc{font-size:15px;color:#475569;line-height:1.6;margin:0 0 16px;min-height:64px}
 .dots{display:flex;justify-content:center;gap:8px;margin-bottom:16px}
 .dot{width:8px;height:8px;border-radius:10px;background:#cbd5e1;transition:all .3s}
 .dot.on{width:24px;background:#0f766e}
 .tour-nav{display:flex;gap:10px}
 .tour-nav button{margin-top:0}
 
-/* Toast & Confetti */
 #tt{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translate(-50%,40px);background:#064e3b;color:#fff;padding:12px 22px;border-radius:24px;opacity:0;transition:.3s;z-index:30;max-width:90vw;text-align:center;font-size:15px;box-shadow:0 10px 25px #0003;font-weight:600}
 #tt.on{opacity:1;transform:translate(-50%,0)}
 .confetti{position:fixed;width:9px;height:9px;z-index:50;pointer-events:none;border-radius:2px;animation:fall 1.8s ease-out forwards}
@@ -139,7 +129,7 @@ button.g{background:transparent;color:#64748b;box-shadow:none;padding:10px}
   <div id="v"></div>
 
   <div class="mu" id="up">
-    กดปุ่ม <b>📷 สแกน QR</b> ด้านบน หรือกดปุ่ม <b>❓ มุมขวาบน</b> เพื่อดูคู่มือ<br>
+    กดปุ่ม <b>📷 สแกน QR</b> ด้านบน หรือกดปุ่ม <b>❓ มุมขวาบน</b> เพื่อดูคู่มือแนะนำ<br>
     ข้อมูลปลอดภัย บันทึกไว้ในเครื่องของคุณเท่านั้น
   </div>
 </div>
@@ -161,7 +151,6 @@ const TDs=s=>{if(!OK10(s))return'-';const[y,m,d]=String(s).slice(0,10).split('-'
 const p2=n=>('0'+n).slice(-2);
 const toast=m=>{const t=$('#tt');t.textContent=m;t.className='on';clearTimeout(t._h);t._h=setTimeout(()=>t.className='',2600)};
 
-/* ลูกเล่นพลุกระดาษฉลองเมื่อเพิ่มใบประกันสำเร็จ */
 function burst(){
   const cols=['#14b8a6','#0f766e','#f59e0b','#3b82f6','#ec4899','#10b981'];
   for(let i=0;i<36;i++){
@@ -255,7 +244,7 @@ function render(){
   <div class="rm"><a onclick="cp(${i})">📋 คัดลอกรหัส</a> · <a onclick="del(${i})">🗑️ ลบใบนี้</a></div>
   ${w.t?`<div class="mu" style="margin-top:6px">✓ ตรวจสอบกับระบบร้านล่าสุด ${(d=>TDs(d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())))(new Date(w.t))}</div>`:''}
 </div></div>`}).join(''):
-'<div class="card hero" style="--c:#0f766e"><div class="em">🛡️</div><h2>ยังไม่มีใบประกันในแอป</h2><p>กดปุ่ม <b>📷 สแกน QR</b> ด้านบนเพื่อสแกนใบรับประกันจากร้าน หรือแตะ <b>❓</b> มุมขวาบนเพื่อดูวิธีใช้งาน</p></div>';
+'<div class="card hero" style="--c:#0f766e"><div class="em">🛡️</div><h2>ยังไม่มีใบประกันในแอป</h2><p>กดปุ่ม <b>📷 สแกน QR</b> ด้านบนเพื่อสแกนใบรับประกันจากร้าน หรือแตะ <b>❓</b> มุมขวาบนเพื่อดูคู่มือพร้อมภาพประกอบ</p></div>';
   tick();
 }
 
@@ -294,27 +283,27 @@ async function copy(t){
   catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(x){}a.remove()}
 }
 
-/* ----- ป็อปอัปสอนการใช้งานแบบ Step-by-Step (Onboarding Tour) ----- */
+/* ----- ป็อปอัปสอนการใช้งานพร้อมรูปภาพประกอบ (Visual Tour) ----- */
 const STEPS=[
   {
-    ic:'👋',
+    img:'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format&fit=crop&q=80',
     t:'ยินดีต้อนรับสู่ "ประกันของฉัน"',
-    d:'ผู้ช่วยเก็บใบรับประกันดิจิทัลบนมือถือ ไม่ต้องกลัวใบเสร็จหายหรือหมึกจาง เช็กวันหมดอายุได้แบบเรียลไทม์ทุกที่ทุกเวลา'
+    d:'แอปเก็บใบรับประกันดิจิทัลบนมือถือ หมดปัญหาใบเสร็จหาย หมึกจาง เช็กวันหมดอายุได้ทันที'
   },
   {
-    ic:'📷',
-    t:'1. สแกน QR เพิ่มใบประกัน',
-    d:'กดปุ่ม <b>"📷 สแกน QR เพิ่มใบประกัน"</b> แล้วส่องกล้องไปที่ QR Code บนใบรับประกันจากทางร้าน ข้อมูลจะถูกบันทึกเข้าเครื่องทันที'
+    img:'https://images.unsplash.com/photo-1595078475328-1ab05d0a6a0e?w=600&auto=format&fit=crop&q=80',
+    t:'1. สแกน QR Code เพื่อเพิ่มใบประกัน',
+    d:'กดปุ่ม <b>"สแกน QR"</b> แล้วส่องกล้องไปที่ QR บนใบรับประกันจากทางร้าน ข้อมูลจะบันทึกเข้าเครื่องทันที'
   },
   {
-    ic:'⏳',
-    t:'2. เช็กวันคุ้มครองแบบนับถอยหลัง',
-    d:'วงแหวนสีเขียวบอกจำนวนวันที่เหลืออยู่ชัดเจน หากขึ้น <b>สีส้ม</b> คือใกล้หมดอายุ (≤7 วัน) และ <b>สีแดง</b> คือหมดระยะประกันแล้ว'
+    img:'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600&auto=format&fit=crop&q=80',
+    t:'2. เช็กวันคุ้มครองแบบเรียลไทม์',
+    d:'วงแหวนสีเขียวบอกเวลาคงเหลือ ถ้าใกล้หมดอายุจะเตือนเป็นสีส้ม และแดงเมื่อหมดประกัน'
   },
   {
-    ic:'🛠️',
-    t:'3. แจ้งเคลมง่ายๆ ในคลิกเดียว',
-    d:'หากสินค้ามีปัญหา กดปุ่ม <b>"🛠️ แจ้งเคลมประกัน"</b> พิมพ์อาการเสีย ระบบจะสร้างข้อความพร้อมรหัสประกันส่งเข้า LINE ร้านให้อัตโนมัติ!'
+    img:'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&auto=format&fit=crop&q=80',
+    t:'3. แจ้งเคลมง่าย ส่งตรงถึงร้านผ่าน LINE',
+    d:'เมื่อสินค้ามีปัญหา กดปุ่ม <b>"แจ้งเคลมประกัน"</b> พิมพ์อาการเสีย ระบบจะส่งข้อมูลเข้าร้านค้าให้ทันที'
   }
 ];
 
@@ -324,7 +313,7 @@ function openTour(step=0){
   const dots=STEPS.map((_,idx)=>`<span class="dot${idx===step?' on':''}"></span>`).join('');
   open_(`
   <div class="tour-card">
-    <div class="tour-icon" key="${step}">${s.ic}</div>
+    <div class="tour-img-box"><img src="${s.img}" alt="คู่มือการใช้งาน"></div>
     <div class="tour-title">${s.t}</div>
     <div class="tour-desc">${s.d}</div>
     <div class="dots">${dots}</div>
@@ -370,7 +359,7 @@ ${st=='void'?'<div class="nt">🚫 ใบประกันนี้ถูกย
 <textarea id="pb" placeholder="พิมพ์อาการเสียคร่าวๆ เช่น จอเป็นเส้น ทัชสกรีนไม่ได้..."></textarea>
 ${lineId(ct)?'<button onclick="sendLine()">💬 ส่งเรื่องเคลมทาง LINE (พร้อมอาการ)</button>':''}
 ${/^https?:/i.test(ct)&&!lineId(ct)?'<button onclick="sendLink()">💬 เปิดแชทร้าน (คัดลอกข้อความให้)</button>':''}
-${tl?'<button class="s" onclick="callShop()">📞 โทรหาร้าน</button><button class="s" onclick="sendSms()">✉️ ส่ง SMS</button>':''}
+${tl?'<button class="s" onclick="callShop()">📞 โทรหาร้าน</button><button 
 <button class="s" onclick="copyMsg()">📋 คัดลอกข้อความเคลม</button>
 <button class="g" onclick="cl()">ปิด</button>`);
 }
@@ -384,7 +373,6 @@ function sendLine(){
 }
 async function sendLink(){const w=cur();await copy(msg(w,pb()));toast('คัดลอกข้อความแล้ว วางในแชทร้านได้เลย');window.open(w.ct,'_blank','noopener')}
 function callShop(){location.href='tel:'+cur().tl.replace(/[^\d+]/g,'')}
-function sendSms(){const w=cur();location.href='sms:'+w.tl.replace(/[^\d+]/g,'')+'?body='+encodeURIComponent(msg(w,pb()))}
 async function copyMsg(){await copy(msg(cur(),pb()));toast('📋 คัดลอกข้อความเคลมแล้ว')}
 
 /* ----- สแกน QR ----- */
@@ -452,7 +440,7 @@ async function inst(){
     :'<li>แตะเมนู <b>⋮</b> (มุมขวาบนของ Chrome)</li><li>เลือกเมนู <b>"ติดตั้งแอป"</b> หรือ <b>"เพิ่มลงในหน้าจอหลัก"</b></li><li>แตะ <b>ติดตั้ง</b> เพื่อยืนยัน</li>'}</ol><button onclick="cl()">เข้าใจแล้ว</button>`);
 }
 
-/* ----- ซิงค์ข้อมูลสด (ถ้ามี API) ----- */
+/* ----- ซิงค์ข้อมูลสด ----- */
 const API='';
 let SB=0;
 function live(ok){
@@ -485,7 +473,7 @@ if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWor
 render();syncAll();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){render();syncAll()}});
 
-/* แสดงป็อปอัปสอนใช้งานอัตโนมัติเมื่อลูกค้าเข้าเว็บครั้งแรก */
+/* เปิดป็อปอัปพร้อมรูปภาพอัตโนมัติเมื่อเข้าเว็บครั้งแรก */
 if(!localStorage.getItem(K_TOUR)){
   setTimeout(()=>openTour(0), 600);
 }
