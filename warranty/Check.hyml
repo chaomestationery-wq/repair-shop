@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ประกันของฉัน</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#0f766e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ประกันของฉัน">
+<style>
+:root{--a:#0f766e;--c:#0f766e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font:17px system-ui,sans-serif;color:#1e293b;min-height:100vh;background:radial-gradient(circle at 1px 1px,#0f766e14 1.2px,transparent 1.4px) 0 0/22px 22px,linear-gradient(180deg,#99f6e4,#f0fdfa 260px,#f5f3ee);background-attachment:fixed}
+.wrap{max-width:480px;margin:auto;padding:calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 40px)}
+.top{display:flex;align-items:center;gap:10px;color:#064e3b;margin:6px 2px 14px}
+.lg{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#0f766e,#14b8a6);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 12px #0f766e44}
+.top h1{font-size:19px;margin:0;flex:1}
+.live{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;background:#fff;color:#0f766e;padding:5px 10px;border-radius:20px;box-shadow:0 1px 6px #0001}
+.live i{width:8px;height:8px;border-radius:50%;background:#16a34a;animation:pl 1.4s infinite}
+.live.off i{background:#dc2626;animation:none}
+@keyframes pl{0%{box-shadow:0 0 0 0 #16a34a88}100%{box-shadow:0 0 0 9px #16a34a00}}
+.card{background:#fff;border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:0 4px 18px #0f766e18;border:1px solid #e6f4f1;animation:up .35s}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.hero{text-align:center;border-top:6px solid var(--c);position:relative;overflow:hidden}
+.hero .em{font-size:64px;line-height:1.1;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+.hero h2{margin:6px 0 2px;font-size:26px;color:var(--c)}
+.hero p{margin:0;color:#64748b}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed #e2e8f0;font-size:16px}
+.kv:last-child{border:0}.kv span{color:#64748b}.kv b{text-align:right}
+h3{margin:0 0 6px;font-size:16px;color:#0f766e}
+button{font:inherit;font-weight:700;width:100%;padding:15px;border:0;border-radius:14px;color:#fff;background:linear-gradient(120deg,#0f766e,#14b8a6);box-shadow:0 5px 14px #0f766e44;cursor:pointer}
+button:active{transform:scale(.98)}
+button.s{background:#fff;color:#0f766e;border:2px solid #99f6e4;box-shadow:none}
+button.g{background:transparent;color:#64748b;box-shadow:none;padding:10px}
+.ring{position:relative;width:230px;height:230px;margin:6px auto}
+.ring svg{transform:rotate(-90deg)}
+.ring .in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .dd{font-size:56px;font-weight:800;line-height:1;color:var(--c)}
+.ring .dl{color:#64748b;font-size:15px}
+.ring .tm{font-size:24px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums;color:#334155}
+.pill{display:inline-block;padding:6px 16px;border-radius:20px;color:#fff;font-weight:700;background:var(--c);font-size:15px}
+.bar{height:12px;background:#e2e8f0;border-radius:8px;overflow:hidden;margin:6px 0}
+.bar div{height:100%;background:linear-gradient(90deg,var(--c),#5eead4);border-radius:8px;transition:width 1s}
+.pc{font-size:14px;color:#64748b}
+.rm{text-align:center;font-size:14px;color:#94a3b8;margin-top:8px}
+.rm a{color:#0f766e;font-weight:600;cursor:pointer;padding:8px}
+.mu{font-size:13px;color:#94a3b8;text-align:center;margin-top:10px}
+.ins{display:flex;gap:10px;align-items:center}
+.ins span{flex:1;font-size:15px}.ins button{width:auto;padding:11px 18px}
+#ov{position:fixed;inset:0;z-index:20;background:#0f1b2d99;display:flex;align-items:flex-end;justify-content:center}
+.sh{background:#fff;width:100%;max-width:480px;max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:20px 16px calc(env(safe-area-inset-bottom) + 18px);animation:sl .25s}
+@keyframes sl{from{transform:translateY(60px);opacity:0}}
+.sh h3{font-size:20px;margin-bottom:2px}
+.sh .sub{color:#64748b;font-size:15px}
+.sh textarea{width:100%;min-height:96px;margin:12px 0 4px;padding:12px 14px;border:2px solid #99f6e4;border-radius:14px;font:inherit;resize:vertical;color:#1e293b}
+.sh textarea:focus{outline:3px solid #14b8a655;border-color:#14b8a6}
+.sh button{margin-top:10px}
+.sh ol{padding-left:22px;line-height:1.9;margin:10px 0}
+.nt{padding:10px 12px;border-radius:12px;background:#fef3c7;color:#b45309;font-size:14px;margin-top:10px}
+#tt{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translate(-50%,40px);background:#064e3b;color:#fff;padding:11px 18px;border-radius:22px;opacity:0;transition:.3s;z-index:30;max-width:90vw;text-align:center;font-size:15px}
+#tt.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="lg">🔧</div><h1 id="shop">ประกันของฉัน</h1><span class="live" id="lv" hidden><i></i><b id="lt">LIVE</b></span></div>
+  <div id="ins" class="card ins" hidden><span>📲 ติดตั้งไว้บนหน้าจอ เปิดดูประกันได้ทันที</span><button onclick="inst()">ติดตั้ง</button></div>
+  <div id="v"></div>
+  <div class="mu" id="up">สแกน QR บนใบรับประกันใบใหม่ เพื่อเพิ่มรายการในแอปนี้<br>ข้อมูลเก็บไว้ในเครื่องของคุณเท่านั้น</div>
+</div>
+<div id="ov" hidden onclick="if(event.target==this)cl()"><div class="sh" id="sh"></div></div>
+<div id="tt"></div>
+<script>
+const $=s=>document.querySelector(s);
+const K='chaome_warranty_v1';
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const MT=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const load=()=>{try{return JSON.parse(localStorage.getItem(K)||'[]')}catch(e){return[]}};
+const save=l=>{try{localStorage.setItem(K,JSON.stringify(l))}catch(e){}};
+const OK10=s=>/^\d{4}-\d\d-\d\d/.test(String(s||''));
+const pdt=(s,sx)=>OK10(s)?new Date(String(s).slice(0,10)+sx):null;
+const TDs=s=>{if(!OK10(s))return'-';const[y,m,d]=String(s).slice(0,10).split('-');return(+d)+' '+MT[+m-1]+' '+(+y+543)};
+const p2=n=>('0'+n).slice(-2);
+const toast=m=>{const t=$('#tt');t.textContent=m;t.className='on';clearTimeout(t._h);t._h=setTimeout(()=>t.className='',2600)};
+let W=load(),CUR=null;
+
+/* รับข้อมูลจาก QR (ลิงก์ ?w=รหัส&n=...&i=...) แล้วเก็บไว้ในเครื่อง */
+(function(){
+  const P=new URLSearchParams(location.search),c=(P.get('w')||'').trim();
+  if(!c)return;
+  const o={c:c,n:P.get('n')||'',i:P.get('i')||'',d:P.get('d')||'',s:P.get('s')||'',e:P.get('e')||'',y:P.get('y')||'',
+           sn:P.get('sn')||'',tl:P.get('tl')||'',ct:P.get('ct')||''};
+  const k=W.findIndex(x=>x.c==c);
+  if(k>=0)W[k]=Object.assign(W[k],o);else W.unshift(o);
+  save(W);
+  try{history.replaceState(null,'',location.pathname)}catch(e){}
+  setTimeout(()=>toast('เพิ่มใบประกันนี้ในแอปแล้ว'),300);
+})();
+
+/* สถานะของใบประกัน: void ยกเลิก / none ไม่พบในระบบ / exp หมดแล้ว / warn ใกล้หมด (≤7 วัน) / ok */
+function stOf(w){
+  const e=pdt(w.e,'T23:59:59+07:00'),ms=e?e-Date.now():null;
+  if(w.v)return'void';if(w.x==='none')return'none';if(ms===null)return'unk';
+  return ms<=0?'exp':ms<=7*864e5?'warn':'ok';
+}
+
+function render(){
+  const l=W.slice().sort((a,b)=>String(b.e).localeCompare(String(a.e)));
+  const sn=(W.find(x=>x.sn)||{}).sn;
+  $('#shop').textContent=sn||'ประกันของฉัน';document.title=(sn?sn+' • ':'')+'ประกันของฉัน';
+  const kv=(a,b)=>b?`<div class="kv"><span>${a}</span><b>${esc(b)}</b></div>`:'';
+  $('#v').innerHTML=l.length?l.map(w=>{const i=W.indexOf(w);return `<div class="card wc" data-i="${i}">
+<div style="text-align:center"><div class="pill pl"></div>
+<div class="ring"><svg width="230" height="230" viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="#e2e8f0" stroke-width="9"/><circle class="rg" cx="60" cy="60" r="54" fill="none" stroke="var(--c)" stroke-width="9" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear"/></svg><div class="in"><div class="dd">-</div><div class="dl">วันคงเหลือ</div><div class="tm"></div></div></div>
+<div class="bar"><div class="br"></div></div><div class="pc"></div></div>
+<div style="margin-top:12px">${kv('รหัสประกัน',w.c)}${kv('ลูกค้า',w.n)}${kv('เครื่อง',w.d)}${kv('รายการ',w.i)}${kv('วันที่ออกใบ',OK10(w.s)?TDs(w.s):'')}${kv('หมดประกัน',OK10(w.e)?TDs(w.e):'')}</div>
+<div style="margin-top:14px"><button onclick="claimGo(${i})">${lineId(w.ct)&&!w.v?'💬 เคลมประกัน (เปิด LINE ร้าน)':'🛠️ เคลมประกัน'}</button></div>
+<div class="rm"><a onclick="claim(${i})">ช่องทางอื่น / พิมพ์อาการ</a> · <a onclick="cp(${i})">คัดลอกรหัส</a> · <a onclick="del(${i})">ลบ</a></div>
+${w.t?`<div class="mu" style="margin-top:4px">✓ ตรวจกับระบบร้านล่าสุด ${(d=>TDs(d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())))(new Date(w.t))} ${new Date(w.t).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}</div>`:''}
+</div>`}).join(''):'<div class="card hero" style="--c:#64748b"><div class="em">🛡️</div><h2>ยังไม่มีใบประกันในแอป</h2><p>สแกน QR บนใบรับประกันที่ได้จากร้าน</p></div>';
+  tick();
+}
+
+/* นับถอยหลังสด ทุกวินาที (สไตล์เดียวกับหน้าตรวจประกันของร้าน) */
+function tick(){
+  document.querySelectorAll('.wc').forEach(c=>{
+    const w=W[+c.dataset.i];if(!w)return;
+    const s=pdt(w.s,'T00:00:00+07:00'),e=pdt(w.e,'T23:59:59+07:00'),ms=e?e-Date.now():null,tot=(s&&e)?Math.max(1,e-s):1,st=stOf(w);
+    let col='#16a34a',t='ประกันยังคุ้มครอง',ic='🛡️ ',frac=ms===null?0:Math.max(0,Math.min(1,ms/tot));
+    if(st=='void'){col='#6b7280';t='ใบประกันถูกยกเลิก';ic='🚫 ';frac=0}
+    else if(st=='none'){col='#6b7280';t='ไม่พบในระบบร้าน';ic='❓ ';frac=0}
+    else if(st=='unk'){col='#6b7280';t='ไม่มีข้อมูลวันหมดประกัน';ic='❓ ';frac=0}
+    else if(st=='exp'){col='#dc2626';t='หมดประกันแล้ว';ic='⛔ ';frac=0}
+    else if(st=='warn'){col='#f59e0b';t='ใกล้หมดประกัน'}
+    c.style.setProperty('--c',col);
+    c.querySelector('.pl').textContent=ic+t;
+    c.querySelector('.rg').setAttribute('stroke-dashoffset',339.3*(1-frac));
+    c.querySelector('.br').style.width=(frac*100)+'%';
+    const dd=c.querySelector('.dd'),tm=c.querySelector('.tm'),pc=c.querySelector('.pc');
+    if(st=='ok'||st=='warn'){
+      const D=Math.floor(ms/864e5),H=Math.floor(ms%864e5/36e5),M=Math.floor(ms%36e5/6e4),S=Math.floor(ms%6e4/1e3);
+      dd.textContent=D;tm.textContent=p2(H)+':'+p2(M)+':'+p2(S);pc.textContent='ใช้ไปแล้ว '+Math.round((1-frac)*100)+'% ของระยะประกัน';
+    }else{
+      dd.textContent=st=='exp'?'0':'—';tm.textContent=st=='exp'?'หมดอายุ '+TDs(w.e):'';pc.textContent='';
+    }
+  });
+}
+setInterval(tick,1000);
+
+function cp(i){copy(W[i].c).then(()=>toast('คัดลอกรหัสแล้ว'))}
+function del(i){if(confirm('ลบใบประกันนี้ออกจากแอป?\n(สแกน QR ใหม่เพื่อเพิ่มกลับได้)')){W.splice(i,1);save(W);render()}}
+async function copy(t){
+  try{await navigator.clipboard.writeText(t)}
+  catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(x){}a.remove()}
+}
+
+/* ----- เคลม ----- */
+const cl=()=>{$('#ov').hidden=true};
+const open_=h=>{$('#sh').innerHTML=h;$('#ov').hidden=false};
+/* ไอดี LINE Official Account ของร้าน: รับได้ทั้ง @ไอดี และลิงก์ line.me/R/ti/p/@ไอดี */
+function lineId(ct){
+  ct=String(ct||'').trim();
+  if(/^@[\w.\-]+$/.test(ct))return ct;
+  const m=/line\.me\/(?:R\/)?ti\/p\/(?:%40|@)([\w.\-]+)/i.exec(ct);
+  return m?'@'+m[1]:'';
+}
+function msg(w,pb){
+  const st=stOf(w);
+  return '🛡️ ขอเคลมประกัน\n'+
+    'รหัสประกัน: '+w.c+(w.n?'\nชื่อลูกค้า: '+w.n:'')+
+    '\n📱 เครื่อง/รุ่น: '+(w.d||'-')+
+    '\n🔧 ซ่อม/เปลี่ยน: '+(w.i||'-')+
+    '\n📅 วันที่ซ่อม: '+(OK10(w.s)?TDs(w.s):'-')+
+    '\n⏳ หมดประกัน: '+TDs(w.e)+(st=='exp'?' (หมดอายุแล้ว)':'')+
+    '\n❗ อาการที่เป็นตอนนี้: '+(pb||'');
+}
+/* กดครั้งเดียว: เปิดแชท LINE ร้านพร้อมข้อความ (ถ้าไม่มี LINE ของร้านหรือใบถูกยกเลิก ให้เปิดหน้าต่างช่องทางอื่นแทน) */
+function claimGo(i){
+  const w=W[i],id=lineId(w.ct);
+  if(!id||w.v)return claim(i);
+  const t=msg(w,'');
+  copy(t);
+  location.href='https://line.me/R/oaMessage/'+id+'/?'+encodeURIComponent(t);
+}
+function claim(i){
+  CUR=i;const w=W[i],st=stOf(w),ct=(w.ct||'').trim(),tl=(w.tl||'').replace(/[^\d+]/g,'');
+  open_(`<h3>🛠️ เคลมประกัน</h3><div class="sub">${esc(w.i||'')} • รหัส ${esc(w.c)}</div>
+${st=='exp'?'<div class="nt">ใบประกันนี้หมดอายุแล้ว ร้านจะพิจารณาให้เป็นกรณีไป</div>':''}
+${st=='void'?'<div class="nt">ใบประกันนี้ถูกยกเลิกในระบบร้าน กรุณาติดต่อร้านเพื่อสอบถาม</div>':''}
+<textarea id="pb" placeholder="บอกอาการที่เป็น เช่น จอเป็นเส้น เปิดไม่ติด"></textarea>
+${lineId(ct)?'<button onclick="sendLine()">💬 ส่งเรื่องเคลมทาง LINE (พร้อมอาการที่พิมพ์)</button>':''}
+${/^https?:/i.test(ct)?'<button onclick="sendLink()">💬 เปิดแชทร้าน (ข้อความจะถูกคัดลอกให้)</button>':''}
+${tl?'<button class="s" onclick="callShop()">📞 โทรหาร้าน</button><button class="s" onclick="sendSms()">✉️ ส่ง SMS</button>':''}
+<button class="s" onclick="copyMsg()">📋 คัดลอกข้อความเคลม</button>
+<button class="g" onclick="cl()">ปิด</button>`);
+}
+const cur=()=>W[CUR],pb=()=>($('#pb').value||'').trim();
+function sendLine(){const w=cur();location.href='https://line.me/R/oaMessage/'+lineId(w.ct)+'/?'+encodeURIComponent(msg(w,pb()))}
+async function sendLink(){const w=cur();await copy(msg(w,pb()));toast('คัดลอกข้อความแล้ว วางในแชทร้านได้เลย');window.open(w.ct,'_blank','noopener')}
+function callShop(){location.href='tel:'+cur().tl.replace(/[^\d+]/g,'')}
+function sendSms(){const w=cur();location.href='sms:'+w.tl.replace(/[^\d+]/g,'')+'?body='+encodeURIComponent(msg(w,pb()))}
+async function copyMsg(){await copy(msg(cur(),pb()));toast('คัดลอกข้อความแล้ว')}
+
+/* ----- ติดตั้งเป็นแอป ----- */
+let DP=null;
+const SA=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const IOS=/iPhone|iPad|iPod/i.test(navigator.userAgent);
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();DP=e;if(!SA())$('#ins').hidden=false});
+addEventListener('appinstalled',()=>{$('#ins').hidden=true;toast('ติดตั้งแล้ว')});
+if(!SA())$('#ins').hidden=false;
+async function inst(){
+  if(DP){DP.prompt();try{await DP.userChoice}catch(e){}DP=null;return}
+  open_(`<h3>📲 ติดตั้งไว้บนหน้าจอ</h3><ol>${IOS
+    ?'<li>เปิดหน้านี้ใน <b>Safari</b></li><li>แตะปุ่ม <b>แชร์</b> (สี่เหลี่ยมมีลูกศรขึ้น)</li><li>แตะ <b>เพิ่มไปยังหน้าจอโฮม</b></li><li>แตะ <b>เพิ่ม</b></li>'
+    :'<li>แตะเมนู <b>⋮</b> ของ Chrome (มุมขวาบน)</li><li>แตะ <b>ติดตั้งแอป</b> หรือ <b>เพิ่มลงในหน้าจอหลัก</b></li><li>แตะ <b>ติดตั้ง/เพิ่ม</b></li>'}</ol><button onclick="cl()">เข้าใจแล้ว</button>`);
+}
+
+/* ===== ตรวจกับระบบร้านแบบสด =====
+   ใส่ลิงก์ /exec ของ Apps Script ด้านล่าง (และเพิ่มโค้ด doGet ตามไฟล์ apps-script-api-snippet.txt)
+   ถ้าเว้นว่าง แอปจะใช้ข้อมูลที่มากับ QR เหมือนเดิม */
+const API='';
+let SB=0;
+function live(ok){
+  if(!API){$('#lv').hidden=true;return}
+  $('#lv').hidden=false;$('#lv').className='live'+(ok?'':' off');$('#lt').textContent=ok?'LIVE':'ออฟไลน์';
+  if(ok)$('#up').textContent='อัปเดตล่าสุด '+new Date().toLocaleTimeString('th-TH',{timeZone:'Asia/Bangkok'});
+}
+async function syncAll(){
+  if(!API||SB)return;SB=1;
+  try{
+    let ok=0;
+    for(const w of W){
+      try{
+        const r=await fetch(API+(API.indexOf('?')<0?'?':'&')+'api=w&w='+encodeURIComponent(w.c),{cache:'no-store'}),d=await r.json();
+        if(d&&d.none){w.x='none';w.v=0}
+        else if(d&&d.code){
+          w.x='';w.v=d.void?1:0;
+          if(d.start)w.s=d.start;if(d.end)w.e=d.end;if(d.name)w.n=d.name;
+          if(d.item)w.i=d.item;if(d.device)w.d=d.device;if(d.shop)w.sn=d.shop;
+        }else continue;
+        w.t=Date.now();ok++;
+      }catch(e){}
+    }
+    if(ok)save(W);
+    live(navigator.onLine&&(!W.length||ok>0));
+    render();
+  }finally{SB=0}
+}
+
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+render();syncAll();
+/* เปิดแอปค้างข้ามวัน ให้ตัวเลขอัปเดตและตรวจกับร้านอีกครั้ง */
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){render();syncAll()}});
+</script>
+</body>
+</html>
