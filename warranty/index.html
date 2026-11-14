@@ -88,13 +88,16 @@ const TDs=s=>{if(!OK10(s))return'-';const[y,m,d]=String(s).slice(0,10).split('-'
 const p2=n=>('0'+n).slice(-2);
 const toast=m=>{const t=$('#tt');t.textContent=m;t.className='on';clearTimeout(t._h);t._h=setTimeout(()=>t.className='',2600)};
 let W=load(),CUR=null;
+/* LINE Official Account ของร้าน (ค่าเริ่มต้น ใช้เมื่อ QR ไม่ได้ส่ง ct มา) */
+const DEF_LINE='@457mwrdi';
+W.forEach(w=>{if(!w.ct)w.ct=DEF_LINE});
 
 /* รับข้อมูลจาก QR (ลิงก์ ?w=รหัส&n=...&i=...) แล้วเก็บไว้ในเครื่อง */
 (function(){
   const P=new URLSearchParams(location.search),c=(P.get('w')||'').trim();
   if(!c)return;
   const o={c:c,n:P.get('n')||'',i:P.get('i')||'',d:P.get('d')||'',s:P.get('s')||'',e:P.get('e')||'',y:P.get('y')||'',
-           sn:P.get('sn')||'',tl:P.get('tl')||'',ct:P.get('ct')||''};
+           sn:P.get('sn')||'',tl:P.get('tl')||'',ct:P.get('ct')||DEF_LINE};
   const k=W.findIndex(x=>x.c==c);
   if(k>=0)W[k]=Object.assign(W[k],o);else W.unshift(o);
   save(W);
@@ -119,8 +122,8 @@ function render(){
 <div class="ring"><svg width="230" height="230" viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="#e2e8f0" stroke-width="9"/><circle class="rg" cx="60" cy="60" r="54" fill="none" stroke="var(--c)" stroke-width="9" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear"/></svg><div class="in"><div class="dd">-</div><div class="dl">วันคงเหลือ</div><div class="tm"></div></div></div>
 <div class="bar"><div class="br"></div></div><div class="pc"></div></div>
 <div style="margin-top:12px">${kv('รหัสประกัน',w.c)}${kv('ลูกค้า',w.n)}${kv('เครื่อง',w.d)}${kv('รายการ',w.i)}${kv('วันที่ออกใบ',OK10(w.s)?TDs(w.s):'')}${kv('หมดประกัน',OK10(w.e)?TDs(w.e):'')}</div>
-<div style="margin-top:14px"><button onclick="claimGo(${i})">${lineId(w.ct)&&!w.v?'💬 เคลมประกัน (เปิด LINE ร้าน)':'🛠️ เคลมประกัน'}</button></div>
-<div class="rm"><a onclick="claim(${i})">ช่องทางอื่น / พิมพ์อาการ</a> · <a onclick="cp(${i})">คัดลอกรหัส</a> · <a onclick="del(${i})">ลบ</a></div>
+<div style="margin-top:14px"><button onclick="claim(${i})">🛠️ เคลมประกัน</button></div>
+<div class="rm"><a onclick="cp(${i})">คัดลอกรหัส</a> · <a onclick="del(${i})">ลบ</a></div>
 ${w.t?`<div class="mu" style="margin-top:4px">✓ ตรวจกับระบบร้านล่าสุด ${(d=>TDs(d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())))(new Date(w.t))} ${new Date(w.t).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})}</div>`:''}
 </div>`}).join(''):'<div class="card hero" style="--c:#64748b"><div class="em">🛡️</div><h2>ยังไม่มีใบประกันในแอป</h2><p>สแกน QR บนใบรับประกันที่ได้จากร้าน</p></div>';
   tick();
@@ -179,14 +182,6 @@ function msg(w,pb){
     '\n⏳ หมดประกัน: '+TDs(w.e)+(st=='exp'?' (หมดอายุแล้ว)':'')+
     '\n❗ อาการที่เป็นตอนนี้: '+(pb||'');
 }
-/* กดครั้งเดียว: เปิดแชท LINE ร้านพร้อมข้อความ (ถ้าไม่มี LINE ของร้านหรือใบถูกยกเลิก ให้เปิดหน้าต่างช่องทางอื่นแทน) */
-function claimGo(i){
-  const w=W[i],id=lineId(w.ct);
-  if(!id||w.v)return claim(i);
-  const t=msg(w,'');
-  copy(t);
-  location.href='https://line.me/R/oaMessage/'+id+'/?'+encodeURIComponent(t);
-}
 function claim(i){
   CUR=i;const w=W[i],st=stOf(w),ct=(w.ct||'').trim(),tl=(w.tl||'').replace(/[^\d+]/g,'');
   open_(`<h3>🛠️ เคลมประกัน</h3><div class="sub">${esc(w.i||'')} • รหัส ${esc(w.c)}</div>
@@ -194,13 +189,18 @@ ${st=='exp'?'<div class="nt">ใบประกันนี้หมดอาย
 ${st=='void'?'<div class="nt">ใบประกันนี้ถูกยกเลิกในระบบร้าน กรุณาติดต่อร้านเพื่อสอบถาม</div>':''}
 <textarea id="pb" placeholder="บอกอาการที่เป็น เช่น จอเป็นเส้น เปิดไม่ติด"></textarea>
 ${lineId(ct)?'<button onclick="sendLine()">💬 ส่งเรื่องเคลมทาง LINE (พร้อมอาการที่พิมพ์)</button>':''}
-${/^https?:/i.test(ct)?'<button onclick="sendLink()">💬 เปิดแชทร้าน (ข้อความจะถูกคัดลอกให้)</button>':''}
+${/^https?:/i.test(ct)&&!lineId(ct)?'<button onclick="sendLink()">💬 เปิดแชทร้าน (ข้อความจะถูกคัดลอกให้)</button>':''}
 ${tl?'<button class="s" onclick="callShop()">📞 โทรหาร้าน</button><button class="s" onclick="sendSms()">✉️ ส่ง SMS</button>':''}
 <button class="s" onclick="copyMsg()">📋 คัดลอกข้อความเคลม</button>
 <button class="g" onclick="cl()">ปิด</button>`);
 }
 const cur=()=>W[CUR],pb=()=>($('#pb').value||'').trim();
-function sendLine(){const w=cur();location.href='https://line.me/R/oaMessage/'+lineId(w.ct)+'/?'+encodeURIComponent(msg(w,pb()))}
+function sendLine(){
+  const w=cur(),p=pb();
+  if(!p){toast('กรุณาพิมพ์อาการก่อน');$('#pb').focus();return}
+  const t=msg(w,p);copy(t);
+  location.href='https://line.me/R/oaMessage/'+lineId(w.ct)+'/?'+encodeURIComponent(t);
+}
 async function sendLink(){const w=cur();await copy(msg(w,pb()));toast('คัดลอกข้อความแล้ว วางในแชทร้านได้เลย');window.open(w.ct,'_blank','noopener')}
 function callShop(){location.href='tel:'+cur().tl.replace(/[^\d+]/g,'')}
 function sendSms(){const w=cur();location.href='sms:'+w.tl.replace(/[^\d+]/g,'')+'?body='+encodeURIComponent(msg(w,pb()))}
