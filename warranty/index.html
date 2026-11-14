@@ -651,10 +651,8 @@ if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWor
 render();syncAll();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){render();syncAll()}});
 
-/* เปิดป็อปอัปอัตโนมัติเมื่อเข้าเว็บครั้งแรก */
-if(!localStorage.getItem(K_TOUR)){
-  setTimeout(()=>openTour(0), 600);
-}
+/* เปิดป็อปอัปอัตโนมัติทุกครั้งที่เข้าเว็บ */
+setTimeout(()=>openTour(0), 600);
 </script>
 </body>
 </html>
