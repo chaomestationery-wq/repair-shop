@@ -359,7 +359,7 @@ ${st=='void'?'<div class="nt">🚫 ใบประกันนี้ถูกย
 <textarea id="pb" placeholder="พิมพ์อาการเสียคร่าวๆ เช่น จอเป็นเส้น ทัชสกรีนไม่ได้..."></textarea>
 ${lineId(ct)?'<button onclick="sendLine()">💬 ส่งเรื่องเคลมทาง LINE (พร้อมอาการ)</button>':''}
 ${/^https?:/i.test(ct)&&!lineId(ct)?'<button onclick="sendLink()">💬 เปิดแชทร้าน (คัดลอกข้อความให้)</button>':''}
-${tl?'<button class="s" onclick="callShop()">📞 โทรหาร้าน
+${tl?'<button class="s" onclick="callShop()">📞 โทรหาร้าน</button><button class="s" onclick="sendSms()">✉️ ส่ง SMS</button>':''}
 <button class="s" onclick="copyMsg()">📋 คัดลอกข้อความเคลม</button>
 <button class="g" onclick="cl()">ปิด</button>`);
 }
