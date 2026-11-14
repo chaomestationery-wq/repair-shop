@@ -84,21 +84,19 @@ button.g{background:transparent;color:#64748b;box-shadow:none;padding:10px}
 
 /* Modal & Tour Styling */
 #ov{position:fixed;inset:0;z-index:20;background:#0f1b2d99;backdrop-filter:blur(5px);display:flex;align-items:flex-end;justify-content:center}
-.sh{background:#fff;width:100%;max-width:480px;max-height:95vh;overflow:auto;border-radius:26px 26px 0 0;padding:24px 20px calc(env(safe-area-inset-bottom) + 22px);box-shadow:0 -10px 40px #0003}
+.sh{background:#fff;width:100%;max-width:480px;max-height:95vh;overflow:auto;border-radius:26px 26px 0 0;padding:20px 16px calc(env(safe-area-inset-bottom) + 20px);box-shadow:0 -10px 40px #0003}
 .sh h3{font-size:21px;margin-bottom:4px}
 .sh .sub{color:#64748b;font-size:15px;margin-bottom:14px}
 .sh textarea{width:100%;min-height:96px;margin:8px 0 4px;padding:12px 14px;border:2px solid #99f6e4;border-radius:14px;font:inherit;resize:vertical;color:#1e293b}
 .nt{padding:12px 14px;border-radius:14px;background:#fef3c7;color:#b45309;font-size:14px;margin-top:10px;line-height:1.5;font-weight:500}
 
 /* Tour Visual SVG Infographic Box */
-.tour-card{text-align:center;padding:2px}
-.tour-svg-box{width:100%;border-radius:16px;overflow:hidden;margin:10px 0 14px;background:#f8fafc;border:1px solid #e2e8f0;box-shadow:0 4px 12px #0f766e0d}
+.tour-card{text-align:center}
+.tour-svg-box{width:100%;border-radius:18px;overflow:hidden;margin:0 0 14px;border:1.5px solid #99f6e4;box-shadow:0 6px 18px #0f766e14}
 .tour-svg-box svg{width:100%;height:auto;display:block}
-.tour-title{font-size:20px;font-weight:800;color:#0f766e;margin:0 0 6px}
-.tour-desc{font-size:15px;color:#475569;line-height:1.6;margin:0 0 16px;min-height:50px}
-.dots{display:flex;justify-content:center;gap:8px;margin-bottom:16px}
-.dot{width:8px;height:8px;border-radius:10px;background:#cbd5e1;transition:all .3s}
-.dot.on{width:24px;background:#0f766e}
+.dots{display:flex;justify-content:center;gap:8px;margin-bottom:14px}
+.dot{width:8px;height:8px;border-radius:10px;background:#cbd5e1;transition:all .3s;cursor:pointer}
+.dot.on{width:26px;background:#0f766e}
 .tour-nav{display:flex;gap:10px}
 .tour-nav button{margin-top:0}
 
@@ -283,70 +281,219 @@ async function copy(t){
   catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(x){}a.remove()}
 }
 
-/* ----- ป็อปอัปสอนการใช้งานพร้อมรูปภาพ SVG Infographic อธิบายขั้นตอนจริง ----- */
-const STEPS=[
-  {
-    svg:`<svg viewBox="0 0 400 240" font-family="'Noto Sans Thai',sans-serif">
-      <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#99f6e4"/><stop offset="1" stop-color="#f0fdfa"/></linearGradient></defs>
-      <rect width="400" height="240" fill="url(#g1)"/>
-      <circle cx="200" cy="120" r="70" fill="#fff" opacity="0.6"/>
-      <rect x="130" y="70" width="140" height="100" rx="14" fill="#0f766e"/>
-      <text x="200" y="115" text-anchor="middle" font-size="28" fill="#fff">🛡️</text>
-      <text x="200" y="145" text-anchor="middle" font-size="14" font-weight="700" fill="#ccfbf1">ประกันของฉัน</text>
-    </svg>`,
-    t:'ยินดีต้อนรับสู่ "ประกันของฉัน"',
-    d:'แอปเก็บใบรับประกันดิจิทัลบนมือถือ ไม่ต้องกลัวใบเสร็จกระดาษหาย เช็กวันหมดอายุได้ทันที'
-  },
-  {
-    svg:`<svg viewBox="0 0 400 240" font-family="'Noto Sans Thai',sans-serif">
-      <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2e8f0"/><stop offset="1" stop-color="#f8fafc"/></linearGradient></defs>
-      <rect width="400" height="240" fill="url(#g2)"/>
-      <rect x="70" y="35" width="110" height="170" rx="8" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
-      <rect x="95" y="60" width="60" height="60" fill="#0f172a"/><g fill="#fff"><rect x="100" y="65" width="12" height="12"/><rect x="138" y="65" width="12" height="12"/><rect x="100" y="103" width="12" height="12"/></g>
-      <path d="M195 120 C 220 100, 240 100, 265 120" fill="none" stroke="#0f766e" stroke-width="4" stroke-dasharray="6 4"/>
-      <rect x="275" y="30" width="80" height="180" rx="20" fill="#0f172a"/>
-      <rect x="281" y="40" width="68" height="160" rx="14" fill="#f0fdfa"/>
-      <rect x="290" y="60" width="50" height="50" rx="8" fill="#0f766e"/><text x="315" y="92" text-anchor="middle" font-size="22" fill="#fff">📷</text>
-    </svg>`,
-    t:'1. สแกน QR Code เพิ่มใบประกัน',
-    d:'กดปุ่ม <b>"📷 สแกน QR"</b> แล้วส่องกล้องไปที่ QR Code บนใบรับประกันจากร้านค้า เพื่อบันทึกเข้าเครื่อง'
-  },
-  {
-    svg:`<svg viewBox="0 0 400 240" font-family="'Noto Sans Thai',sans-serif">
-      <defs><linearGradient id="g3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0fdfa"/><stop offset="1" stop-color="#ccfbf1"/></linearGradient></defs>
-      <rect width="400" height="240" fill="url(#g3)"/>
-      <circle cx="200" cy="120" r="70" fill="none" stroke="#cbd5e1" stroke-width="12"/>
-      <circle cx="200" cy="120" r="70" fill="none" stroke="#16a34a" stroke-width="12" stroke-linecap="round" stroke-dasharray="310 440" transform="rotate(-90 200 120)"/>
-      <text x="200" y="115" text-anchor="middle" font-size="38" font-weight="800" fill="#16a34a">30</text>
-      <text x="200" y="145" text-anchor="middle" font-size="14" font-weight="700" fill="#475569">วันคงเหลือ</text>
-    </svg>`,
-    t:'2. เช็กวันคุ้มครองแบบเรียลไทม์',
-    d:'วงแหวนบอกเวลาคงเหลือ สีเขียวคือปกติ สีส้มคือใกล้หมดประกัน (≤7 วัน) และสีแดงคือหมดอายุแล้ว'
-  },
-  {
-    svg:`<svg viewBox="0 0 400 240" font-family="'Noto Sans Thai',sans-serif">
-      <defs><linearGradient id="g4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#e2e8f0"/></linearGradient></defs>
-      <rect width="400" height="240" fill="url(#g4)"/>
-      <rect x="80" y="60" width="240" height="120" rx="18" fill="#fff" stroke="#99f6e4" stroke-width="3"/>
-      <rect x="105" y="85" width="190" height="36" rx="8" fill="#f1f5f9"/>
-      <text x="120" y="109" font-size="13" fill="#64748b">พิมพ์อาการเสียคร่าวๆ...</text>
-      <rect x="105" y="130" width="190" height="36" rx="10" fill="#06c755"/>
-      <text x="200" y="153" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">💬 ส่งเรื่องเคลมทาง LINE</text>
-    </svg>`,
-    t:'3. แจ้งเคลมง่าย ส่งตรงถึงร้านผ่าน LINE',
-    d:'เมื่อสินค้ามีปัญหา กดปุ่ม <b>"แจ้งเคลมประกัน"</b> พิมพ์อาการเสีย ระบบจะส่งข้อมูลเข้าร้านค้าให้ทันที'
-  }
+/* ----- SVG คู่มือต้นฉบับทั้ง 4 ภาพ ----- */
+const SVGS=[
+`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" font-family="'Noto Sans Thai','Sarabun',Tahoma,sans-serif">
+<defs>
+<linearGradient id="bg0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#99f6e4"/><stop offset="1" stop-color="#f0fdfa"/></linearGradient>
+<linearGradient id="tl0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f766e"/><stop offset="1" stop-color="#14b8a6"/></linearGradient>
+</defs>
+<rect width="800" height="600" fill="url(#bg0)"/>
+<text x="400" y="78" text-anchor="middle" font-size="44" font-weight="800" fill="#0f766e">ประกันของฉัน</text>
+<text x="400" y="116" text-anchor="middle" font-size="21" fill="#115e59">เก็บใบรับประกันไว้ในมือถือ เช็กได้ทุกเมื่อ</text>
+<rect x="285" y="140" width="230" height="430" rx="34" fill="#0f172a"/>
+<rect x="296" y="156" width="208" height="398" rx="24" fill="#f0fdfa"/>
+<rect x="372" y="146" width="56" height="6" rx="3" fill="#334155"/>
+<rect x="310" y="170" width="30" height="30" rx="9" fill="url(#tl0)"/>
+<path d="M325 176 l9 3 v7 c0 5 -4 8 -9 10 c-5 -2 -9 -5 -9 -10 v-7z" fill="#fff"/>
+<text x="348" y="191" font-size="15" font-weight="700" fill="#064e3b">ประกันของฉัน</text>
+<rect x="335" y="212" width="130" height="26" rx="13" fill="#16a34a"/>
+<text x="400" y="230" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">ประกันยังคุ้มครอง</text>
+<circle cx="400" cy="308" r="52" fill="none" stroke="#e2e8f0" stroke-width="11"/>
+<circle cx="400" cy="308" r="52" fill="none" stroke="#16a34a" stroke-width="11" stroke-linecap="round" stroke-dasharray="300 327" transform="rotate(-90 400 308)"/>
+<text x="400" y="318" text-anchor="middle" font-size="36" font-weight="800" fill="#16a34a">30</text>
+<text x="400" y="336" text-anchor="middle" font-size="11" fill="#64748b">วันคงเหลือ</text>
+<g font-size="12">
+<text x="314" y="392" fill="#64748b">รหัสประกัน</text><text x="486" y="392" text-anchor="end" font-weight="700" fill="#0f172a">TEST-001</text>
+<line x1="314" y1="400" x2="486" y2="400" stroke="#e2e8f0" stroke-dasharray="3 3"/>
+<text x="314" y="420" fill="#64748b">เครื่อง</text><text x="486" y="420" text-anchor="end" font-weight="700" fill="#0f172a">Samsung A15</text>
+<line x1="314" y1="428" x2="486" y2="428" stroke="#e2e8f0" stroke-dasharray="3 3"/>
+<text x="314" y="448" fill="#64748b">รายการ</text><text x="486" y="448" text-anchor="end" font-weight="700" fill="#0f172a">เปลี่ยนจอ</text>
+<line x1="314" y1="456" x2="486" y2="456" stroke="#e2e8f0" stroke-dasharray="3 3"/>
+<text x="314" y="476" fill="#64748b">หมดประกัน</text><text x="486" y="476" text-anchor="end" font-weight="700" fill="#0f172a">14 ธ.ค. 2569</text>
+</g>
+<rect x="312" y="496" width="176" height="38" rx="12" fill="url(#tl0)"/>
+<text x="400" y="520" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">แจ้งเคลมประกัน</text>
+<g>
+<rect x="24" y="190" width="240" height="74" rx="20" fill="#fff" stroke="#99f6e4" stroke-width="2"/>
+<circle cx="52" cy="227" r="14" fill="#16a34a"/><path d="M45 227 l5 5 l9 -10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="76" y="224" font-size="16" font-weight="700" fill="#0f766e">ไม่ต้องกลัวใบหาย</text>
+<text x="76" y="246" font-size="13" fill="#64748b">เก็บไว้ในเครื่องของคุณ</text>
+<rect x="24" y="330" width="240" height="74" rx="20" fill="#fff" stroke="#99f6e4" stroke-width="2"/>
+<circle cx="52" cy="367" r="14" fill="#16a34a"/><path d="M45 367 l5 5 l9 -10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="76" y="364" font-size="16" font-weight="700" fill="#0f766e">สแกน QR ครั้งเดียว</text>
+<text x="76" y="386" font-size="13" fill="#64748b">เพิ่มใบประกันเสร็จทันที</text>
+</g>
+<g>
+<rect x="536" y="260" width="240" height="74" rx="20" fill="#fff" stroke="#99f6e4" stroke-width="2"/>
+<circle cx="564" cy="297" r="14" fill="#16a34a"/><path d="M557 297 l5 5 l9 -10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="588" y="294" font-size="16" font-weight="700" fill="#0f766e">รู้วันหมดประกันทันที</text>
+<text x="588" y="316" font-size="13" fill="#64748b">นับถอยหลังแบบสดๆ</text>
+<rect x="536" y="400" width="240" height="74" rx="20" fill="#fff" stroke="#99f6e4" stroke-width="2"/>
+<circle cx="564" cy="437" r="14" fill="#16a34a"/><path d="M557 437 l5 5 l9 -10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="588" y="434" font-size="16" font-weight="700" fill="#0f766e">แจ้งเคลมผ่าน LINE</text>
+<text x="588" y="456" font-size="13" fill="#64748b">ส่งข้อมูลถึงร้านให้เลย</text>
+</g>
+</svg>`,
+
+`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" font-family="'Noto Sans Thai','Sarabun',Tahoma,sans-serif">
+<defs>
+<linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#99f6e4"/><stop offset="1" stop-color="#f0fdfa"/></linearGradient>
+<linearGradient id="tl1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f766e"/><stop offset="1" stop-color="#14b8a6"/></linearGradient>
+<marker id="ar1" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#0f766e"/></marker>
+</defs>
+<rect width="800" height="600" fill="url(#bg1)"/>
+<circle cx="60" cy="62" r="26" fill="url(#tl1)"/>
+<text x="60" y="72" text-anchor="middle" font-size="28" font-weight="800" fill="#fff">1</text>
+<text x="104" y="72" font-size="34" font-weight="800" fill="#0f766e">สแกน QR เพิ่มใบประกัน</text>
+<g transform="rotate(-4 165 335)">
+<rect x="40" y="165" width="250" height="340" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+<text x="165" y="205" text-anchor="middle" font-size="20" font-weight="800" fill="#0f172a">ใบรับประกัน</text>
+<line x1="60" y1="218" x2="270" y2="218" stroke="#0f172a" stroke-dasharray="5 4"/>
+<g transform="translate(90 240)">
+<rect width="150" height="150" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+<g fill="none" stroke="#0f172a" stroke-width="7"><rect x="12" y="12" width="36" height="36"/><rect x="102" y="12" width="36" height="36"/><rect x="12" y="102" width="36" height="36"/></g>
+<g fill="#0f172a"><rect x="22" y="22" width="16" height="16"/><rect x="112" y="22" width="16" height="16"/><rect x="22" y="112" width="16" height="16"/>
+<rect x="62" y="14" width="10" height="10"/><rect x="76" y="30" width="10" height="10"/><rect x="62" y="48" width="10" height="10"/><rect x="88" y="58" width="10" height="10"/><rect x="110" y="62" width="10" height="10"/><rect x="128" y="76" width="10" height="10"/>
+<rect x="14" y="62" width="10" height="10"/><rect x="34" y="76" width="10" height="10"/><rect x="62" y="82" width="10" height="10"/><rect x="82" y="92" width="10" height="10"/><rect x="104" y="100" width="10" height="10"/><rect x="124" y="112" width="10" height="10"/>
+<rect x="62" y="116" width="10" height="10"/><rect x="88" y="124" width="10" height="10"/><rect x="108" y="128" width="10" height="10"/><rect x="48" y="62" width="10" height="10"/></g>
+</g>
+<rect x="60" y="410" width="210" height="9" rx="4" fill="#e2e8f0"/>
+<rect x="60" y="430" width="160" height="9" rx="4" fill="#e2e8f0"/>
+<rect x="60" y="450" width="185" height="9" rx="4" fill="#e2e8f0"/>
+<text x="165" y="488" text-anchor="middle" font-size="13" fill="#64748b">QR จากทางร้าน</text>
+</g>
+<path d="M300 300 C 350 260, 400 260, 456 300" fill="none" stroke="#0f766e" stroke-width="4" stroke-dasharray="9 7" marker-end="url(#ar1)"/>
+<text x="378" y="250" text-anchor="middle" font-size="18" font-weight="700" fill="#0f766e">ส่องกล้อง</text>
+<rect x="470" y="120" width="250" height="450" rx="36" fill="#0f172a"/>
+<rect x="482" y="136" width="226" height="418" rx="26" fill="#f0fdfa"/>
+<rect x="561" y="126" width="68" height="6" rx="3" fill="#334155"/>
+<rect x="496" y="150" width="198" height="40" rx="13" fill="url(#tl1)"/>
+<text x="595" y="176" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">สแกน QR เพิ่มใบประกัน</text>
+<rect x="496" y="204" width="198" height="198" rx="16" fill="#0f172a"/>
+<g transform="translate(540 248) scale(.7)" opacity=".85">
+<rect width="150" height="150" fill="#fff"/>
+<g fill="none" stroke="#0f172a" stroke-width="7"><rect x="12" y="12" width="36" height="36"/><rect x="102" y="12" width="36" height="36"/><rect x="12" y="102" width="36" height="36"/></g>
+<g fill="#0f172a"><rect x="22" y="22" width="16" height="16"/><rect x="112" y="22" width="16" height="16"/><rect x="22" y="112" width="16" height="16"/><rect x="62" y="14" width="10" height="10"/><rect x="76" y="30" width="10" height="10"/><rect x="88" y="58" width="10" height="10"/><rect x="62" y="82" width="10" height="10"/><rect x="104" y="100" width="10" height="10"/><rect x="88" y="124" width="10" height="10"/><rect x="34" y="76" width="10" height="10"/></g>
+</g>
+<g stroke="#2dd4bf" stroke-width="6" fill="none" stroke-linecap="round">
+<path d="M510 236 v-18 a6 6 0 0 1 6 -6 h18"/><path d="M680 236 v-18 a6 6 0 0 0 -6 -6 h-18"/>
+<path d="M510 370 v18 a6 6 0 0 0 6 6 h18"/><path d="M680 370 v18 a6 6 0 0 1 -6 6 h-18"/>
+</g>
+<rect x="506" y="300" width="178" height="4" rx="2" fill="#5eead4"/>
+<text x="595" y="428" text-anchor="middle" font-size="13" fill="#334155">หันกล้องไปที่ QR บนใบรับประกัน</text>
+<rect x="496" y="440" width="198" height="34" rx="11" fill="#fff" stroke="#99f6e4" stroke-width="2"/>
+<text x="595" y="462" text-anchor="middle" font-size="13" font-weight="700" fill="#0f766e">วางลิงก์ใบประกันแทน</text>
+<circle cx="520" cy="514" r="15" fill="#16a34a"/><path d="M513 514 l5 5 l9 -10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="544" y="519" font-size="14" font-weight="700" fill="#15803d">สแกนติด เพิ่มใบประกันเอง</text>
+<text x="165" y="560" text-anchor="middle" font-size="16" font-weight="700" fill="#0f766e">ได้ QR พร้อมใบรับประกันจากร้าน</text>
+</svg>`,
+
+`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" font-family="'Noto Sans Thai','Sarabun',Tahoma,sans-serif">
+<defs>
+<linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#99f6e4"/><stop offset="1" stop-color="#f0fdfa"/></linearGradient>
+<linearGradient id="tl2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f766e"/><stop offset="1" stop-color="#14b8a6"/></linearGradient>
+</defs>
+<rect width="800" height="600" fill="url(#bg2)"/>
+<circle cx="60" cy="62" r="26" fill="url(#tl2)"/>
+<text x="60" y="72" text-anchor="middle" font-size="28" font-weight="800" fill="#fff">2</text>
+<text x="104" y="72" font-size="34" font-weight="800" fill="#0f766e">เช็กวันคุ้มครองได้ทันที</text>
+<rect x="40" y="120" width="250" height="450" rx="36" fill="#0f172a"/>
+<rect x="52" y="136" width="226" height="418" rx="26" fill="#f0fdfa"/>
+<rect x="131" y="126" width="68" height="6" rx="3" fill="#334155"/>
+<rect x="64" y="150" width="202" height="250" rx="18" fill="#fff" stroke="#e6f4f1"/>
+<rect x="124" y="162" width="82" height="22" rx="11" fill="#16a34a"/>
+<text x="165" y="177" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">ประกันยังคุ้มครอง</text>
+<circle cx="165" cy="248" r="44" fill="none" stroke="#e2e8f0" stroke-width="9"/>
+<circle cx="165" cy="248" r="44" fill="none" stroke="#16a34a" stroke-width="9" stroke-linecap="round" stroke-dasharray="230 277" transform="rotate(-90 165 248)"/>
+<text x="165" y="256" text-anchor="middle" font-size="30" font-weight="800" fill="#16a34a">30</text>
+<text x="165" y="272" text-anchor="middle" font-size="10" fill="#64748b">วันคงเหลือ</text>
+<rect x="84" y="312" width="162" height="8" rx="4" fill="#e2e8f0"/><rect x="84" y="312" width="140" height="8" rx="4" fill="#16a34a"/>
+<text x="165" y="338" text-anchor="middle" font-size="10" fill="#64748b">ใช้ไปแล้ว 2% ของระยะประกัน</text>
+<g font-size="11"><text x="82" y="364" fill="#64748b">เครื่อง</text><text x="248" y="364" text-anchor="end" font-weight="700" fill="#0f172a">Samsung A15</text>
+<text x="82" y="386" fill="#64748b">หมดประกัน</text><text x="248" y="386" text-anchor="end" font-weight="700" fill="#0f172a">14 ธ.ค. 2569</text></g>
+<rect x="64" y="412" width="202" height="46" rx="14" fill="#fff" stroke="#e6f4f1"/>
+<text x="78" y="441" font-size="18">🛡️</text>
+<text x="108" y="432" font-size="13" font-weight="700" fill="#1e293b">iPhone 13</text><text x="108" y="448" font-size="10" fill="#64748b">TEST-002 • เปลี่ยนแบต</text>
+<rect x="206" y="426" width="46" height="20" rx="10" fill="#fff7ed"/><text x="229" y="440" text-anchor="middle" font-size="10" font-weight="700" fill="#f59e0b">4 วัน</text>
+<rect x="64" y="466" width="202" height="46" rx="14" fill="#fff" stroke="#e6f4f1"/>
+<text x="78" y="495" font-size="18">⛔</text>
+<text x="108" y="486" font-size="13" font-weight="700" fill="#1e293b">OPPO A58</text><text x="108" y="502" font-size="10" fill="#64748b">TEST-003 • เปลี่ยนจอ</text>
+<rect x="198" y="480" width="54" height="20" rx="10" fill="#fef2f2"/><text x="225" y="494" text-anchor="middle" font-size="10" font-weight="700" fill="#dc2626">หมดแล้ว</text>
+<g>
+<rect x="340" y="130" width="420" height="96" rx="22" fill="#fff" stroke="#bbf7d0" stroke-width="2.5"/>
+<circle cx="392" cy="178" r="26" fill="none" stroke="#e2e8f0" stroke-width="9"/><circle cx="392" cy="178" r="26" fill="none" stroke="#16a34a" stroke-width="9" stroke-linecap="round" stroke-dasharray="140 164" transform="rotate(-90 392 178)"/>
+<text x="440" y="172" font-size="22" font-weight="800" fill="#16a34a">สีเขียว • ยังคุ้มครอง</text>
+<text x="440" y="198" font-size="15" fill="#475569">เหลือเวลามากกว่า 7 วัน</text>
+<rect x="340" y="244" width="420" height="96" rx="22" fill="#fff" stroke="#fde68a" stroke-width="2.5"/>
+<circle cx="392" cy="292" r="26" fill="none" stroke="#e2e8f0" stroke-width="9"/><circle cx="392" cy="292" r="26" fill="none" stroke="#f59e0b" stroke-width="9" stroke-linecap="round" stroke-dasharray="40 164" transform="rotate(-90 392 292)"/>
+<text x="440" y="286" font-size="22" font-weight="800" fill="#d97706">สีส้ม • ใกล้หมดประกัน</text>
+<text x="440" y="312" font-size="15" fill="#475569">เหลือไม่เกิน 7 วัน รีบแจ้งเคลมได้</text>
+<rect x="340" y="358" width="420" height="96" rx="22" fill="#fff" stroke="#fecaca" stroke-width="2.5"/>
+<circle cx="392" cy="406" r="26" fill="none" stroke="#e2e8f0" stroke-width="9"/>
+<text x="392" y="414" text-anchor="middle" font-size="22" font-weight="800" fill="#dc2626">0</text>
+<text x="440" y="400" font-size="22" font-weight="800" fill="#dc2626">สีแดง • หมดประกันแล้ว</text>
+<text x="440" y="426" font-size="15" fill="#475569">ติดต่อร้านเพื่อพิจารณาเป็นรายกรณี</text>
+</g>
+<rect x="340" y="480" width="420" height="70" rx="20" fill="#ecfeff" stroke="#99f6e4" stroke-width="2"/>
+<text x="360" y="510" font-size="17" font-weight="700" fill="#0f766e">มีหลายใบประกัน?</text>
+<text x="360" y="535" font-size="15" fill="#475569">แตะที่แถบเพื่อขยาย/ย่อดู • ใบล่าสุดจะเปิดไว้ให้</text>
+</svg>`,
+
+`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" font-family="'Noto Sans Thai','Sarabun',Tahoma,sans-serif">
+<defs>
+<linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#99f6e4"/><stop offset="1" stop-color="#f0fdfa"/></linearGradient>
+<linearGradient id="tl3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f766e"/><stop offset="1" stop-color="#14b8a6"/></linearGradient>
+</defs>
+<rect width="800" height="600" fill="url(#bg3)"/>
+<circle cx="60" cy="62" r="26" fill="url(#tl3)"/>
+<text x="60" y="72" text-anchor="middle" font-size="28" font-weight="800" fill="#fff">3</text>
+<text x="104" y="72" font-size="34" font-weight="800" fill="#0f766e">แจ้งเคลมง่าย ผ่าน LINE ร้าน</text>
+<rect x="30" y="130" width="230" height="390" rx="26" fill="#fff" stroke="#99f6e4" stroke-width="2.5"/>
+<circle cx="64" cy="168" r="18" fill="#0f766e"/><text x="64" y="175" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">1</text>
+<text x="92" y="176" font-size="19" font-weight="800" fill="#0f766e">แตะแจ้งเคลม</text>
+<rect x="50" y="225" width="190" height="56" rx="16" fill="url(#tl3)"/>
+<text x="145" y="259" text-anchor="middle" font-size="17" font-weight="700" fill="#fff">แจ้งเคลมประกัน</text>
+<circle cx="215" cy="270" r="20" fill="#f59e0b" opacity=".25"/><circle cx="215" cy="270" r="9" fill="#f59e0b"/>
+<text x="145" y="352" text-anchor="middle" font-size="15" fill="#475569">เปิดใบประกันที่ต้องการ</text>
+<text x="145" y="374" text-anchor="middle" font-size="15" fill="#475569">แล้วกดปุ่มแจ้งเคลม</text>
+<rect x="285" y="130" width="230" height="390" rx="26" fill="#fff" stroke="#99f6e4" stroke-width="2.5"/>
+<circle cx="319" cy="168" r="18" fill="#0f766e"/><text x="319" y="175" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">2</text>
+<text x="347" y="176" font-size="19" font-weight="800" fill="#0f766e">พิมพ์อาการ</text>
+<rect x="305" y="205" width="190" height="104" rx="14" fill="#fff" stroke="#14b8a6" stroke-width="2.5"/>
+<text x="318" y="233" font-size="15" fill="#0f172a">จอเป็นเส้น ทัชสกรีน</text>
+<text x="318" y="256" font-size="15" fill="#0f172a">ไม่ติดบางจุด</text>
+<rect x="318" y="268" width="2" height="20" fill="#0f766e"/>
+<rect x="305" y="326" width="190" height="46" rx="14" fill="#06c755"/>
+<text x="400" y="355" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">ส่งเรื่องเคลมทาง LINE</text>
+<text x="400" y="408" text-anchor="middle" font-size="15" fill="#475569">พิมพ์อาการเสียคร่าวๆ</text>
+<text x="400" y="430" text-anchor="middle" font-size="15" fill="#475569">แล้วกดปุ่มสีเขียว</text>
+<rect x="540" y="130" width="230" height="390" rx="26" fill="#fff" stroke="#99f6e4" stroke-width="2.5"/>
+<circle cx="574" cy="168" r="18" fill="#0f766e"/><text x="574" y="175" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">3</text>
+<text x="602" y="176" font-size="19" font-weight="800" fill="#0f766e">เด้งเข้า LINE</text>
+<rect x="556" y="200" width="198" height="214" rx="16" fill="#e8f5e9"/>
+<path d="M556 216 a16 16 0 0 1 16 -16 h166 a16 16 0 0 1 16 16 v14 h-198z" fill="#06c755"/>
+<text x="655" y="222" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">LINE ร้านค้า</text>
+<rect x="568" y="244" width="174" height="110" rx="14" fill="#fff" stroke="#bbf7d0"/>
+<g font-size="12" fill="#0f172a"><text x="580" y="264" font-weight="700">ขอแจ้งเคลมประกัน</text>
+<text x="580" y="284">รหัส: TEST-001</text><text x="580" y="302">เครื่อง: Samsung A15</text><text x="580" y="320">รายการ: เปลี่ยนจอ</text><text x="580" y="338">อาการ: จอเป็นเส้น</text></g>
+<rect x="568" y="366" width="130" height="34" rx="17" fill="#fff" stroke="#cbd5e1"/>
+<text x="580" y="388" font-size="12" fill="#94a3b8">ข้อความพร้อมแล้ว</text>
+<circle cx="722" cy="383" r="18" fill="#06c755"/><path d="M714 383 h16 m-7 -7 l7 7 l-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="655" y="448" text-anchor="middle" font-size="15" fill="#475569">ข้อมูลลูกค้าและอาการ</text>
+<text x="655" y="470" text-anchor="middle" font-size="15" fill="#475569">ใส่ให้ครบ กดส่งได้เลย</text>
+<path d="M266 325 l14 0 m-6 -7 l7 7 l-7 7" stroke="#0f766e" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M521 325 l14 0 m-6 -7 l7 7 l-7 7" stroke="#0f766e" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="400" y="568" text-anchor="middle" font-size="18" font-weight="700" fill="#0f766e">ร้านได้รับข้อมูลครบ ไม่ต้องอธิบายซ้ำ</text>
+</svg>`
 ];
 
 function openTour(step=0){
-  const s=STEPS[step];
-  const isLast=step===STEPS.length-1;
-  const dots=STEPS.map((_,idx)=>`<span class="dot${idx===step?' on':''}"></span>`).join('');
+  const isLast=step===SVGS.length-1;
+  const dots=SVGS.map((_,idx)=>`<span class="dot${idx===step?' on':''}" onclick="openTour(${idx})"></span>`).join('');
   open_(`
   <div class="tour-card">
-    <div class="tour-svg-box">${s.svg}</div>
-    <div class="tour-title">${s.t}</div>
-    <div class="tour-desc">${s.d}</div>
+    <div class="tour-svg-box">${SVGS[step]}</div>
     <div class="dots">${dots}</div>
     <div class="tour-nav">
       ${step>0?`<button class="s" style="flex:1" onclick="openTour(${step-1})">← ย้อนกลับ</button>`:`<button class="g" style="flex:1" onclick="finishTour()">ข้าม</button>`}
@@ -390,7 +537,7 @@ ${st=='void'?'<div class="nt">🚫 ใบประกันนี้ถูกย
 <textarea id="pb" placeholder="พิมพ์อาการเสียคร่าวๆ เช่น จอเป็นเส้น ทัชสกรีนไม่ได้..."></textarea>
 ${lineId(ct)?'<button onclick="sendLine()">💬 ส่งเรื่องเคลมทาง LINE (พร้อมอาการ)</button>':''}
 ${/^https?:/i.test(ct)&&!lineId(ct)?'<button onclick="sendLink()">💬 เปิดแชทร้าน (คัดลอกข้อความให้)</button>':''}
-${tl?'<button class="s" onclick="callShop()">📞 โทรหาร้าน</button><button class="s" onclick="sendSms()">✉️ ส่ง SMS</button>':''}
+${tl?'<button class="s" onclick="callShop()">📞 โทรหาร้าน</button>':''}
 <button class="s" onclick="copyMsg()">📋 คัดลอกข้อความเคลม</button>
 <button class="g" onclick="cl()">ปิด</button>`);
 }
@@ -404,7 +551,6 @@ function sendLine(){
 }
 async function sendLink(){const w=cur();await copy(msg(w,pb()));toast('คัดลอกข้อความแล้ว วางในแชทร้านได้เลย');window.open(w.ct,'_blank','noopener')}
 function callShop(){location.href='tel:'+cur().tl.replace(/[^\d+]/g,'')}
-function sendSms(){const w=cur();location.href='sms:'+w.tl.replace(/[^\d+]/g,'')+'?body='+encodeURIComponent(msg(w,pb()))}
 async function copyMsg(){await copy(msg(cur(),pb()));toast('📋 คัดลอกข้อความเคลมแล้ว')}
 
 /* ----- สแกน QR ----- */
