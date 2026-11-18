@@ -340,6 +340,13 @@ button.btn.s:active { background: #e2e8f0; }
 .tl .n:before { background: var(--primary); box-shadow: 0 0 0 5px rgba(6, 199, 85, 0.2); }
 .tl small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; margin-top: 2px; }
 
+/* Pattern lock pad */
+#padWrap { margin-top: 10px; padding: 12px; background: #f8fafc; border: 1.5px solid var(--border); border-radius: 14px; text-align: center; }
+.pad-hint { font-size: 12.5px; color: var(--muted); margin-bottom: 8px; }
+.pad-res { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.pad-res b { color: var(--primary-dark); letter-spacing: 1px; }
+#pad { width: 240px; height: 240px; margin: 0 auto; background: #1e293b; border-radius: 16px; touch-action: none; user-select: none; -webkit-user-select: none; }
+#padSvg { width: 100%; height: 100%; display: block; touch-action: none; }
 #lt { display: block; margin-top: 8px; color: var(--muted); font-size: 12.5px; text-align: center; }
 [hidden] { display: none !important; }
 </style>
@@ -388,8 +395,15 @@ button.btn.s:active { background: #e2e8f0; }
       <div class="chips sym" id="sy"></div>
       <textarea id="ex" maxlength="200" placeholder="อธิบายอาการเพิ่มเติม เช่น ตกน้ำมา, เปิดไม่ติด, มีเสียงดัง (ไม่บังคับ)" style="margin-top:10px"></textarea>
 
-      <label>🔑 รหัสปลดล็อก / รหัสเข้าเครื่อง <span class="hint">ไม่บังคับ — ไว้ให้ช่างเทสระบบหลังซ่อม (ถ้าเป็นลากเส้นให้พิมพ์เลข 1-9 เช่น 1-2-5-8-9)</span></label>
+      <label>🔑 รหัสปลดล็อก / รหัสเข้าเครื่อง <span class="hint">ไม่บังคับ — ไว้ให้ช่างเทสระบบหลังซ่อม พิมพ์รหัสเอง หรือแตะปุ่มด้านล่างเพื่อวาดลวดลายปลดล็อก</span></label>
       <input id="pw" placeholder="รหัสผ่านเครื่อง (ปลอดภัย เห็นเฉพาะช่าง)" maxlength="30" autocomplete="off">
+      <button type="button" class="btn s" id="padBtn" style="margin-top:8px">✏️ วาดลวดลายปลดล็อก (ลากเส้นเชื่อมจุด)</button>
+      <div id="padWrap" hidden>
+        <div class="pad-hint" id="padHint">ลากนิ้วเชื่อมจุดตามลวดลายที่ใช้ปลดล็อกเครื่อง (อย่างน้อย 4 จุด)</div>
+        <div id="pad"><svg id="padSvg" viewBox="0 0 240 240"></svg></div>
+        <div class="pad-res">ลำดับจุด: <b id="padRes">-</b></div>
+        <button type="button" class="btn s" id="padClr" style="margin-top:8px">🗑️ ล้างลวดลาย วาดใหม่</button>
+      </div>
 
       <label>รูปแบบการรับ-ส่งเครื่อง <span class="hint">หากไม่เลือกเลย = ลูกค้านำเครื่องมาที่ร้านเอง</span></label>
       <label class="opt on" id="o1">
@@ -768,7 +782,110 @@ $('cp').onclick = async () => {
   } catch (e) { $('cp').textContent = 'แตะค้างที่รหัสเพื่อคัดลอก'; }
 };
 $('tr').onclick = () => { $('sc').value = last; $('stl').value = lastPhone; tab(2); sload(true); };
+/* ---------- วาดลวดลายปลดล็อก (Pattern Lock) ---------- */
+const PAD = (() => {
+  const svg = $('padSvg'), NS = 'http://www.w3.org/2000/svg';
+  const pts = [];                       // ตำแหน่งจุดทั้ง 9 (หมายเลข 1-9)
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) pts.push({x: 40 + c * 80, y: 40 + r * 80});
+  const line = document.createElementNS(NS, 'polyline');
+  line.setAttribute('fill', 'none'); line.setAttribute('stroke', '#06c755');
+  line.setAttribute('stroke-width', '7'); line.setAttribute('stroke-linecap', 'round'); line.setAttribute('stroke-linejoin', 'round');
+  const tail = document.createElementNS(NS, 'line');
+  tail.setAttribute('stroke', '#06c755'); tail.setAttribute('stroke-width', '7'); tail.setAttribute('stroke-linecap', 'round'); tail.setAttribute('opacity', '.6');
+  svg.appendChild(line); svg.appendChild(tail);
+  const dots = pts.map((p, i) => {
+    const g = document.createElementNS(NS, 'g');
+    const ring = document.createElementNS(NS, 'circle');
+    ring.setAttribute('cx', p.x); ring.setAttribute('cy', p.y); ring.setAttribute('r', 20); ring.setAttribute('fill', '#06c755'); ring.setAttribute('opacity', '0');
+    const dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('cx', p.x); dot.setAttribute('cy', p.y); dot.setAttribute('r', 7); dot.setAttribute('fill', '#e2e8f0');
+    const tx = document.createElementNS(NS, 'text');
+    tx.setAttribute('x', p.x); tx.setAttribute('y', p.y + 24); tx.setAttribute('fill', '#64748b'); tx.setAttribute('font-size', '10'); tx.setAttribute('text-anchor', 'middle');
+    tx.textContent = i + 1;
+    g.appendChild(ring); g.appendChild(dot); g.appendChild(tx); svg.appendChild(g);
+    return {ring, dot};
+  });
+  let seq = [], drawing = false;
+
+  function toSvg(e) {
+    const r = svg.getBoundingClientRect();
+    return {x: (e.clientX - r.left) * 240 / r.width, y: (e.clientY - r.top) * 240 / r.height};
+  }
+  function hit(p) {
+    for (let i = 0; i < 9; i++) if (Math.hypot(p.x - pts[i].x, p.y - pts[i].y) < 26) return i;
+    return -1;
+  }
+  function add(i) {
+    if (seq.includes(i)) return;
+    if (seq.length) {                    // ถ้าลากข้ามจุดกลางที่ยังไม่ถูกเลือก ให้เพิ่มจุดกลางด้วย (เหมือนหน้าจอมือถือ)
+      const a = seq[seq.length - 1], ar = Math.floor(a / 3), ac = a % 3, br = Math.floor(i / 3), bc = i % 3;
+      if ((ar + br) % 2 === 0 && (ac + bc) % 2 === 0 && Math.max(Math.abs(ar - br), Math.abs(ac - bc)) === 2) {
+        const mid = ((ar + br) / 2) * 3 + (ac + bc) / 2;
+        if (!seq.includes(mid)) seq.push(mid);
+      }
+    }
+    seq.push(i);
+  }
+  function paint() {
+    dots.forEach((d, i) => {
+      const on = seq.includes(i);
+      d.ring.setAttribute('opacity', on ? '.35' : '0');
+      d.dot.setAttribute('fill', on ? '#06c755' : '#e2e8f0');
+      d.dot.setAttribute('r', on ? 9 : 7);
+    });
+    line.setAttribute('points', seq.map(i => pts[i].x + ',' + pts[i].y).join(' '));
+    const txt = seq.map(i => i + 1).join('-');
+    $('padRes').textContent = txt || '-';
+    $('padHint').style.color = '';
+  }
+  function commit() {
+    if (!seq.length) return;
+    if (seq.length < 4) {
+      $('padHint').textContent = '⚠️ ต้องเชื่อมอย่างน้อย 4 จุด ลองวาดใหม่อีกครั้ง';
+      $('padHint').style.color = '#ef4444';
+      clear(true); return;
+    }
+    $('pw').value = seq.map(i => i + 1).join('-');
+    $('padHint').textContent = '✓ บันทึกลวดลายแล้ว (วาดใหม่ได้ถ้าต้องการแก้ไข)';
+    $('padHint').style.color = '#059669';
+  }
+  function clear(keepHint) {
+    seq = []; tail.setAttribute('opacity', '0'); paint();
+    if (keepHint === true) { $('padHint').style.color = '#ef4444'; }
+  }
+  svg.addEventListener('pointerdown', e => {
+    e.preventDefault(); svg.setPointerCapture(e.pointerId);
+    seq = []; drawing = true; paint();
+    $('padHint').textContent = 'กำลังวาด... ลากต่อจนครบลวดลายแล้วปล่อยนิ้ว'; $('padHint').style.color = '';
+    const p = toSvg(e), i = hit(p); if (i >= 0) { add(i); paint(); }
+  });
+  svg.addEventListener('pointermove', e => {
+    if (!drawing) return; e.preventDefault();
+    const p = toSvg(e), i = hit(p);
+    if (i >= 0 && !seq.includes(i)) { add(i); paint(); }
+    if (seq.length) {
+      const l = pts[seq[seq.length - 1]];
+      tail.setAttribute('x1', l.x); tail.setAttribute('y1', l.y); tail.setAttribute('x2', p.x); tail.setAttribute('y2', p.y); tail.setAttribute('opacity', '.6');
+    }
+  });
+  const end = e => { if (!drawing) return; drawing = false; tail.setAttribute('opacity', '0'); commit(); };
+  svg.addEventListener('pointerup', end);
+  svg.addEventListener('pointercancel', end);
+
+  $('padBtn').onclick = () => {
+    const open = $('padWrap').hidden;
+    $('padWrap').hidden = !open;
+    $('padBtn').textContent = open ? '⌨️ ปิดช่องวาดลวดลาย' : '✏️ วาดลวดลายปลดล็อก (ลากเส้นเชื่อมจุด)';
+  };
+  $('padClr').onclick = () => {
+    clear(); $('pw').value = '';
+    $('padHint').textContent = 'ลากนิ้วเชื่อมจุดตามลวดลายที่ใช้ปลดล็อกเครื่อง (อย่างน้อย 4 จุด)'; $('padHint').style.color = '';
+  };
+  return {reset() { clear(); $('padWrap').hidden = true; $('padBtn').textContent = '✏️ วาดลวดลายปลดล็อก (ลากเส้นเชื่อมจุด)'; }};
+})();
+
 $('again').onclick = () => {
+  PAD.reset();
   ['md','ex','pw'].forEach(i => $(i).value = '');
   [...$('sy').children].forEach(b => b.classList.remove('on'));
   $('done').hidden = true; $('f').hidden = false; map.invalidateSize(); updateProgress();
