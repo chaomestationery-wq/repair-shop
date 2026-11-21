@@ -532,7 +532,7 @@ a.xlb:active { transform: scale(.98); }
 <script>
 const API = "https://script.google.com/macros/s/AKfycbwHQdrFAr3KtH6HK-pykwZlVFakeYpX2gwUzJb0q1yG5WdapTlf73qtyRyuGmSnsSN0/exec";
 const CENTER = [17.4, 104.77], ZOOM = 12; // พิกัดร้านเริ่มต้น
-const WARRANTY_URL = "https://chaomestationery-wq.github.io/warranty/"; // ลิงก์หน้า "ประกันของฉัน" (แก้ได้ที่นี่ที่เดียว)
+const WARRANTY_URL = "https://chaomestationery-wq.github.io/repair-shop/warranty/"; // ลิงก์หน้า "ประกันของฉัน" (แก้ได้ที่นี่ที่เดียว)
 document.querySelectorAll('[data-wl]').forEach(a => a.href = WARRANTY_URL);
 const $ = i => document.getElementById(i);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
